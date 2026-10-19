@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧱 TEMA 03 • Introdução ao HTML — Laboratório Interativo v14</title>
+<style>
+  :root{
+    --bg-body:#090d16; --surface-dark:#111827; --surface-hover:#1f293d;
+    --card-white:#ffffff; --primary:#ea580c; --primary-hover:#c2410c;
+    --primary-light:#fb923c; --blue-accent:#0284c7; --purple-accent:#7c3aed;
+    --emerald:#10b981; --amber:#f59e0b; --text-dark:#0f172a; --text-muted:#64748b;
+    --border-light:#e2e8f0; --border-dark:#334155; --radius-main:20px;
+    --transicao:all .25s ease; --tok-bg:#0f172a; --tok-tag:#fdba74;
+    --tok-attr:#7dd3fc; --tok-string:#fde047; --tok-punct:#cbd5e1; --tok-text:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(circle at 10% 15%,#2e1505 0%,#090d16 65%);
+    color:var(--text-dark);min-height:100vh;padding:24px 14px 90px;line-height:1.6;}
+  .container{max-width:1100px;margin:0 auto;}
+  .header{background:linear-gradient(135deg,#c2410c 0%,#ea580c 50%,#f59e0b 100%);
+    border-radius:var(--radius-main);padding:38px 24px;margin-bottom:24px;text-align:center;
+    color:#fff;box-shadow:0 12px 35px rgba(234,88,12,.35);}
+  .header h1{font-size:2.1rem;margin-bottom:8px;letter-spacing:-.5px;
+    display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+  .header h1 span{color:#fef08a;}
+  .header p{opacity:.95;font-size:1.05rem;max-width:860px;margin:0 auto;}
+  .badge-group{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px;}
+  .badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);
+    padding:5px 14px;border-radius:30px;font-size:.75rem;font-weight:700;color:#fff;}
+  .badge.v14{background:#fef08a;color:#7c2d12;border-color:#fde047;}
+  .tabs-nav{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:22px;}
+  .tab-btn{background:var(--surface-dark);color:#94a3b8;border:1px solid var(--border-dark);
+    padding:12px 18px;border-radius:30px;font-size:.88rem;font-weight:700;cursor:pointer;
+    white-space:nowrap;transition:var(--transicao);font-family:inherit;}
+  .tab-btn:hover{color:#fff;background:var(--surface-hover);}
+  .tab-btn.active{background:linear-gradient(135deg,#c2410c,#ea580c);color:#fff;
+    border-color:#fb923c;box-shadow:0 0 16px rgba(234,88,12,.45);}
+  .tab-content{display:none;animation:fadeIn .3s ease-out;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .card{background:var(--card-white);border-radius:var(--radius-main);padding:28px;
+    margin-bottom:24px;box-shadow:0 10px 30px rgba(0,0,0,.15);}
+  .card h2{color:#c2410c;margin-bottom:14px;border-left:5px solid var(--primary);
+    padding-left:12px;font-size:1.45rem;display:flex;align-items:center;gap:8px;}
+  .card h3{color:#1e1b4b;margin:22px 0 10px 0;font-size:1.15rem;}
+  .card p{color:#334155;margin-bottom:12px;font-size:.96rem;}
+  .card ul,.card ol{color:#334155;line-height:1.8;margin:8px 0 14px 25px;font-size:.95rem;}
+  .highlight-box{padding:16px 20px;border-radius:12px;margin:14px 0;font-size:.94rem;line-height:1.7;}
+  .highlight-box.orange{background:#fff7ed;border-left:5px solid #ea580c;color:#9a3412;}
+  .highlight-box.blue{background:#e0f2fe;border-left:5px solid #0284c7;color:#0369a1;}
+  .highlight-box.purple{background:#f3e8ff;border-left:5px solid #9333ea;color:#6b21a8;}
+  .highlight-box.green{background:#dcfce7;border-left:5px solid #16a34a;color:#15803d;}
+  .highlight-box code{background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.15);
+    color:#0f172a;padding:2px 6px;border-radius:4px;font-weight:800;}
+  code{background:#f1f5f9;color:#7c2d12;padding:2px 6px;border-radius:4px;
+    font-family:'Courier New',monospace;font-weight:700;font-size:.88em;border:1px solid var(--border-light);}
+  pre code,.code-pane code,.caos-codigo code,.codigo-versao-box code,.arvore-html code,
+  .no-arvore code,.explicacao-arvore code,.regiao-diag code,.versao-card code,
+  .nivel-arvore code,.tag-bloco code,.anatomia-tag code,.anatomia-tag span,
+  .sem-codigo-preview code{background:transparent;border:0;padding:0;border-radius:0;color:inherit;font-weight:inherit;font-size:inherit;}
+
+  .arvore-construcao{background:#090d16;border:2px solid var(--border-dark);border-radius:14px;padding:16px;min-height:280px;}
+  .arvore-construcao .rotulo-etapa{color:#fb923c;font-size:.78rem;font-weight:800;
+    text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .arvore-construcao .rotulo-etapa .pista{color:#94a3b8;font-weight:600;text-transform:none;letter-spacing:0;font-size:.72rem;}
+  .nivel-arvore{border:2px dashed #334155;border-radius:10px;padding:12px;margin:8px 0;
+    background:rgba(255,255,255,.02);transition:var(--transicao);position:relative;}
+  .nivel-arvore.disponivel{border-color:#fb923c;background:rgba(234,88,12,.15);cursor:pointer;}
+  .nivel-arvore.disponivel:hover{background:rgba(234,88,12,.28);}
+  .nivel-arvore.bloqueado{border-color:#475569;background:rgba(30,41,59,.5);cursor:not-allowed;opacity:.75;}
+  .nivel-arvore.preenchido{border-color:#10b981;background:rgba(16,185,129,.15);cursor:pointer;}
+  .nivel-arvore.preenchido-errado{border-color:#dc2626;background:rgba(220,38,38,.18);cursor:pointer;}
+  .nivel-arvore .trilha-slot{font-family:'Courier New',monospace;font-size:.72rem;
+    color:#94a3b8;margin-bottom:6px;line-height:1.4;word-break:break-word;}
+  .nivel-arvore .trilha-slot .sep{color:#475569;margin:0 3px;}
+  .nivel-arvore .tag-bloco{font-family:'Courier New',monospace;font-weight:800;
+    font-size:.9rem;color:#fb923c;display:block;}
+  .nivel-arvore.preenchido .tag-bloco{color:#6ee7b7;}
+  .nivel-arvore.preenchido-errado .tag-bloco{color:#fca5a5;}
+  .nivel-arvore .desc-bloco{font-size:.76rem;color:#cbd5e1;font-style:italic;margin-top:4px;line-height:1.45;}
+  .nivel-arvore .pista-slot{font-size:.7rem;color:#fbbf24;margin-top:6px;display:none;font-weight:600;}
+  .nivel-arvore.bloqueado .pista-slot{display:block;color:#94a3b8;font-weight:400;}
+  .nivel-arvore .acoes-slot{position:absolute;top:8px;right:8px;display:none;gap:4px;}
+  .nivel-arvore.preenchido .acoes-slot,.nivel-arvore.preenchido-errado .acoes-slot{display:flex;}
+  .nivel-arvore .acoes-slot button{background:#0f172a;border:1px solid #334155;color:#f87171;
+    font-size:.68rem;padding:2px 6px;border-radius:5px;cursor:pointer;font-family:inherit;font-weight:700;}
+  .nivel-arvore .acoes-slot button:hover{background:#450a0a;}
+  .nivel-filhos{padding-left:22px;margin-top:10px;border-left:2px dotted #334155;margin-left:4px;}
+  .banco-blocos{display:flex;flex-wrap:wrap;gap:8px;padding:14px;margin-top:14px;
+    background:#0c1424;border:1px dashed #334155;border-radius:10px;min-height:60px;align-items:center;}
+  .banco-blocos .rotulo-banco-bloco{width:100%;font-size:.7rem;font-weight:800;
+    text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin-bottom:4px;}
+  .bloco-disponivel{background:#1e293b;border:1px solid #475569;color:#e2e8f0;
+    padding:8px 14px;border-radius:8px;font-family:'Courier New',monospace;font-size:.82rem;
+    font-weight:700;cursor:pointer;transition:var(--transicao);position:relative;}
+  .bloco-disponivel:hover:not(.usado){background:#334155;border-color:#fb923c;}
+  .bloco-disponivel .contador{position:absolute;top:-6px;right:-6px;background:#f59e0b;
+    color:#1e1b4b;font-size:.62rem;font-weight:900;width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;border:2px solid #0c1424;font-family:'Segoe UI',sans-serif;}
+  .bloco-disponivel.selecionado{background:linear-gradient(135deg,#0284c7,#0369a1);
+    border-color:#38bdf8;color:#fff;box-shadow:0 0 12px rgba(56,189,248,.5);}
+  .bloco-disponivel.usado{opacity:.3;cursor:not-allowed;pointer-events:none;}
+
+  .grid-julgar{display:flex;flex-direction:column;gap:14px;margin:14px 0;}
+  .versao-card{background:#0f172a;border:2px solid #334155;border-radius:12px;padding:16px;
+    transition:var(--transicao);position:relative;display:flex;flex-direction:column;gap:10px;}
+  .versao-card:hover{border-color:#64748b;background:#131c31;}
+  .versao-card.selecionada{border-color:#0284c7;background:#0b192e;box-shadow:0 0 16px rgba(2,132,199,.25);}
+  .versao-card.correta{border-color:#10b981;background:rgba(16,185,129,.08);}
+  .versao-card.errada{border-color:#dc2626;background:rgba(220,38,38,.08);}
+  .versao-card-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+  .versao-badge{background:#1e293b;color:#fb923c;padding:4px 10px;border-radius:6px;
+    font-size:.78rem;font-weight:800;letter-spacing:.5px;border:1px solid #334155;font-family:monospace;}
+  .versao-card.correta .versao-badge{background:#064e3b;color:#6ee7b7;border-color:#10b981;}
+  .versao-card.errada .versao-badge{background:#450a0a;color:#fca5a5;border-color:#dc2626;}
+  .btn-escolher-versao{background:#1e293b;color:#cbd5e1;border:1px solid #475569;padding:6px 14px;
+    border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;transition:var(--transicao);font-family:inherit;}
+  .btn-escolher-versao:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .versao-card.selecionada .btn-escolher-versao{background:#0284c7;color:#fff;border-color:#38bdf8;}
+  .codigo-versao-box{background:#070b12;border:1px solid #1e293b;border-radius:8px;padding:12px;
+    font-family:'Courier New',monospace;font-size:.79rem;color:#e2e8f0;line-height:1.65;overflow-x:auto;white-space:pre;}
+  .diagnostico-versao{display:none;padding:10px 14px;border-radius:8px;font-size:.82rem;line-height:1.55;}
+  .diagnostico-versao.mostrar{display:block;}
+  .diagnostico-versao.ok{background:#064e3b;color:#d1fae5;border-left:4px solid #10b981;}
+  .diagnostico-versao.no{background:#450a0a;color:#fee2e2;border-left:4px solid #dc2626;}
+
+  .anatomia-tag{background:var(--tok-bg);border:1px solid var(--border-dark);border-radius:12px;
+    padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;
+    font-size:clamp(.72rem,2.3vw,.92rem);line-height:1.9;overflow-x:auto;
+    white-space:pre-wrap;word-break:break-word;color:#f1f5f9;}
+  .anatomia-tag .tok-punct{color:var(--tok-punct);font-weight:700;}
+  .anatomia-tag .tok-tag{color:var(--tok-tag);}
+  .anatomia-tag .tok-attr{color:var(--tok-attr);}
+  .anatomia-tag .tok-string{color:var(--tok-string);}
+  .anatomia-tag .tok-text{color:var(--tok-text);}
+  .tabela-logica{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem;}
+  .tabela-logica th{background:linear-gradient(135deg,#1e1b4b,#c2410c);color:#fff;padding:12px 14px;text-align:left;font-weight:600;}
+  .tabela-logica td{padding:12px 14px;border-bottom:1px solid var(--border-light);color:#334155;vertical-align:top;}
+  .tabela-logica tr:hover td{background:#f8fafc;}
+  .arvore-html{background:#090d16;border:2px solid var(--border-dark);border-radius:16px;padding:22px;margin:18px 0;color:#fff;}
+  .no-arvore{border:2px dashed #334155;border-radius:10px;padding:12px;margin:8px 0;
+    cursor:pointer;transition:var(--transicao);background:rgba(255,255,255,.02);}
+  .no-arvore:hover{border-color:#fb923c;background:rgba(234,88,12,.12);}
+  .no-arvore.ativo{border-color:#fb923c;background:linear-gradient(135deg,rgba(234,88,12,.3),rgba(245,158,11,.2));box-shadow:0 0 16px rgba(234,88,12,.4);}
+  .no-arvore .rotulo-no{font-family:monospace;font-weight:800;font-size:.95rem;color:#fb923c;margin-bottom:4px;}
+  .no-arvore .filhos{padding-left:22px;margin-top:8px;}
+  .no-arvore .fio{color:#cbd5e1;font-style:italic;font-size:.82rem;line-height:1.5;}
+  .explicacao-arvore{background:var(--surface-dark);border:1px solid #1e293b;border-radius:12px;
+    padding:18px;margin-top:14px;color:#cbd5e1;font-size:.9rem;line-height:1.65;}
+  .explicacao-arvore h5{color:#fb923c;font-size:1rem;margin-bottom:6px;}
+
+  .code-wrapper{position:relative;margin:18px 0 16px 0;border-radius:14px;overflow:hidden;
+    border:1px solid var(--border-dark);background:#090d16;}
+  .code-header{display:flex;justify-content:space-between;align-items:center;
+    background:#0f172a;padding:10px 16px;border-bottom:1px solid var(--border-dark);flex-wrap:wrap;gap:8px;}
+  .code-title{color:#fb923c;font-size:.84rem;font-weight:700;font-family:monospace;}
+  .code-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .code-actions button{border:none;padding:5px 12px;border-radius:6px;cursor:pointer;
+    font-size:.75rem;font-weight:700;transition:var(--transicao);
+    display:inline-flex;align-items:center;gap:4px;font-family:inherit;}
+  .copy-btn{background:var(--emerald);color:#042f2e;}
+  .copy-btn:hover{background:#059669;color:#fff;}
+  .run-oc-btn{background:#ea580c;color:#fff;}
+  .run-oc-btn:hover{background:#c2410c;transform:scale(1.02);}
+  .run-inline-btn{background:#7c3aed;color:#fff;}
+  .run-inline-btn:hover{background:#6d28d9;transform:scale(1.02);}
+  .download-btn{background:#0284c7;color:#fff;}
+  .download-btn:hover{background:#0369a1;transform:scale(1.02);}
+  .preview-inline{margin:14px 0;border:1px solid var(--border-dark);border-radius:12px;overflow:hidden;background:#090d16;}
+  .preview-inline .preview-header{display:flex;justify-content:space-between;align-items:center;
+    padding:8px 12px;background:#0f172a;border-bottom:1px solid #1e293b;color:#cbd5e1;
+    font-size:.78rem;font-weight:700;font-family:monospace;gap:8px;flex-wrap:wrap;}
+  .preview-inline .preview-close{background:transparent;border:1px solid #334155;color:#f87171;
+    padding:3px 10px;border-radius:6px;cursor:pointer;font-size:.72rem;font-weight:700;font-family:inherit;}
+  .preview-inline .preview-close:hover{background:#450a0a;border-color:#f87171;}
+  .preview-inline iframe{width:100%;height:420px;border:none;background:#fff;display:block;}
+  .code-abas-nav{display:flex;gap:4px;background:#090d16;padding:6px 14px 0;border-bottom:1px solid #1e293b;overflow-x:auto;}
+  .code-aba-btn{background:transparent;border:none;color:#64748b;padding:8px 14px;font-size:.8rem;
+    font-weight:700;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;
+    transition:var(--transicao);white-space:nowrap;}
+  .code-aba-btn:hover{color:#cbd5e1;}
+  .code-aba-btn.active{color:#fb923c;border-bottom-color:#fb923c;}
+  .code-pane{display:none;padding:16px 18px;color:#e2e8f0;font-family:'Courier New',monospace;
+    font-size:.79rem;line-height:1.65;overflow-x:auto;white-space:pre;max-height:420px;}
+  .code-pane.active{display:block;}
+  .explicacao-lab{background:#f8fafc;border-left:5px solid var(--primary);border-radius:12px;
+    padding:20px 24px;margin:0 0 34px 0;font-size:.92rem;line-height:1.7;
+    color:#334155;box-shadow:0 4px 14px rgba(0,0,0,.04);}
+  .explicacao-lab h4{color:#c2410c;margin-bottom:12px;font-size:1.1rem;}
+  .explicacao-lab h5{color:#1e293b;margin:16px 0 6px 0;font-size:.98rem;font-weight:700;}
+  .explicacao-lab p{margin-bottom:8px;font-size:.92rem;}
+  .explicacao-lab ul,.explicacao-lab ol{margin:6px 0 10px 22px;font-size:.92rem;}
+  .diag-seletor{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+  .diag-lab-btn{flex:1;min-width:200px;padding:14px 18px;border-radius:12px;
+    background:#f8fafc;border:2px solid var(--border-light);cursor:pointer;
+    font-family:inherit;text-align:left;transition:var(--transicao);}
+  .diag-lab-btn:hover{border-color:var(--primary);background:#fff7ed;}
+  .diag-lab-btn.active{border-color:var(--primary);background:linear-gradient(135deg,#fff7ed,#fed7aa);
+    box-shadow:0 4px 14px rgba(234,88,12,.2);}
+  .diag-lab-btn .titulo{display:block;font-weight:800;color:#1e1b4b;font-size:.92rem;margin-bottom:2px;}
+  .diag-lab-btn .sub{display:block;font-size:.78rem;color:#64748b;}
+  .diag-painel{display:none;}
+  .diag-painel.active{display:block;}
+  .etapa-stepper{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+  .etapa-chip{flex:1;min-width:150px;padding:10px 14px;border-radius:10px;
+    background:#f1f5f9;border:2px solid var(--border-light);font-size:.8rem;
+    font-weight:700;color:#64748b;text-align:center;transition:var(--transicao);cursor:pointer;font-family:inherit;}
+  .etapa-chip.ativa{background:#fff7ed;border-color:var(--primary);color:#c2410c;}
+  .etapa-chip.concluida{background:#dcfce7;border-color:#16a34a;color:#15803d;}
+  .etapa-chip .mini-nota{display:block;font-size:.7rem;font-weight:600;margin-top:2px;opacity:.8;}
+  .etapa-bloco{display:none;}
+  .etapa-bloco.ativa{display:block;animation:fadeIn .3s ease-out;}
+  .wireframe-diag{background:#111827;border:2px solid var(--border-dark);border-radius:14px;
+    padding:16px;display:flex;flex-direction:column;gap:10px;}
+  .regiao-diag{border:2px dashed #475569;border-radius:10px;padding:16px 18px;
+    background:rgba(255,255,255,.02);cursor:pointer;transition:var(--transicao);
+    color:#cbd5e1;font-size:.85rem;font-family:monospace;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .regiao-diag:hover{border-color:#fb923c;color:#fbbf24;background:rgba(234,88,12,.1);}
+  .regiao-diag.ativa{border-color:#fb923c;background:linear-gradient(135deg,rgba(234,88,12,.25),rgba(245,158,11,.15));color:#fb923c;}
+  .regiao-diag .num-regiao{background:#fb923c;color:#0f172a;width:26px;height:26px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;
+    flex-shrink:0;font-family:'Segoe UI',sans-serif;}
+  .regiao-diag.correta{border-color:#10b981;background:rgba(16,185,129,.15);color:#6ee7b7;cursor:default;}
+  .regiao-diag.correta .num-regiao{background:#10b981;color:#042f2e;}
+  .paineis-duplos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+  .painel-info-diag{background:#f8fafc;border-radius:12px;padding:16px 18px;border:1px solid var(--border-light);}
+  .painel-info-diag h5{font-size:.92rem;color:#1e1b4b;margin-bottom:8px;}
+  .painel-info-diag p{font-size:.85rem;color:#475569;line-height:1.6;margin-bottom:8px;}
+  .painel-info-diag .pergunta{font-size:.9rem;font-weight:700;color:#0f172a;margin-bottom:10px;line-height:1.5;}
+  .opcoes-tag{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0;}
+  .opcao-tag{background:#fff;border:2px solid var(--border-light);border-radius:8px;
+    padding:10px;cursor:pointer;font-family:'Courier New',monospace;font-weight:700;
+    font-size:.82rem;color:#1e293b;transition:var(--transicao);text-align:center;}
+  .opcao-tag:hover:not(:disabled){border-color:var(--primary);background:#fff7ed;}
+  .opcao-tag.correta{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+  .opcao-tag.errada{border-color:#dc2626;background:#fee2e2;color:#b91c1c;}
+  .opcao-tag:disabled{cursor:default;}
+  .opcoes-justif{display:flex;flex-direction:column;gap:8px;margin:12px 0;}
+  .opcao-justif{background:#fff;border:2px solid var(--border-light);border-radius:8px;
+    padding:12px 14px;cursor:pointer;font-family:inherit;font-size:.85rem;
+    text-align:left;color:#334155;line-height:1.5;transition:var(--transicao);}
+  .opcao-justif:hover:not(:disabled){border-color:var(--purple-accent);background:#faf5ff;}
+  .opcao-justif.correta{border-color:#16a34a;background:#dcfce7;color:#15803d;}
+  .opcao-justif.errada{border-color:#dc2626;background:#fee2e2;color:#b91c1c;}
+  .opcao-justif:disabled{cursor:default;}
+  .resultado-diag{padding:14px 16px;border-radius:10px;margin-top:12px;font-size:.86rem;line-height:1.6;}
+  .resultado-diag.ok{background:#dcfce7;border-left:4px solid #16a34a;color:#15803d;}
+  .resultado-diag.no{background:#fee2e2;border-left:4px solid #dc2626;color:#b91c1c;}
+  .resultado-diag.info{background:#dbeafe;border-left:4px solid #0284c7;color:#075985;}
+  .resultado-diag ul{margin:8px 0 0 20px;}
+  .resultado-diag li{margin-bottom:8px;}
+  .btn-diag-acao{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;border:none;
+    padding:10px 22px;border-radius:24px;font-weight:700;font-size:.85rem;cursor:pointer;
+    font-family:inherit;transition:var(--transicao);margin-right:8px;margin-top:12px;}
+  .btn-diag-acao:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px rgba(2,132,199,.35);}
+  .btn-diag-acao:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-diag-secundario{background:transparent;color:#94a3b8;border:1px solid #334155;
+    padding:10px 18px;border-radius:24px;font-weight:700;font-size:.85rem;cursor:pointer;
+    font-family:inherit;transition:var(--transicao);margin-top:12px;}
+  .btn-diag-secundario:hover{color:#f87171;border-color:#f87171;}
+  .wireframe-container{display:grid;grid-template-columns:2fr 1.3fr;gap:18px;background:#090d16;
+    border:2px solid var(--border-dark);border-radius:16px;padding:22px;margin:16px 0;color:#fff;}
+  .mockup-blueprint{display:flex;flex-direction:column;gap:8px;background:#111827;
+    border:2px dashed #334155;border-radius:12px;padding:12px;}
+  .bloco-semantico{border:2px solid #334155;border-radius:8px;padding:10px;text-align:center;
+    font-family:monospace;font-size:.82rem;font-weight:bold;cursor:pointer;
+    transition:var(--transicao);background:rgba(255,255,255,.02);user-select:none;color:#e2e8f0;}
+  .bloco-semantico:hover{background:rgba(234,88,12,.2);border-color:var(--primary-light);transform:scale(1.01);}
+  .bloco-semantico.ativo{background:linear-gradient(135deg,rgba(234,88,12,.35),rgba(245,158,11,.25));
+    border-color:var(--primary-light);box-shadow:0 0 14px rgba(234,88,12,.4);color:#fb923c;}
+  .corpo-duplo{display:grid;grid-template-columns:2fr 1fr;gap:8px;}
+  .main-bloco{display:flex;flex-direction:column;gap:8px;}
+  .painel-explicacao-semantica{background:#111827;border:1px solid #1e293b;border-radius:12px;
+    padding:18px;display:flex;flex-direction:column;justify-content:center;}
+  .painel-explicacao-semantica h4{color:var(--primary-light);font-size:1.1rem;margin-bottom:6px;}
+  .painel-explicacao-semantica p{color:#cbd5e1;font-size:.88rem;line-height:1.6;margin-bottom:10px;}
+  .sem-codigo-preview{background:#1e293b;color:#6ee7b7;display:block;padding:8px 10px;
+    font-size:.78rem;white-space:pre-wrap;border-radius:6px;font-family:'Courier New',monospace;overflow-x:auto;}
+  .caos-wrapper{background:#450a0a;border:2px solid #b91c1c;border-radius:14px;padding:20px;margin:18px 0;color:#fecaca;}
+  .caos-wrapper h4{color:#fca5a5;margin-bottom:10px;font-size:1.05rem;}
+  .caos-codigo{background:#1c0505;border:1px solid #7f1d1d;border-radius:10px;padding:16px;
+    font-family:'Courier New',monospace;font-size:.8rem;line-height:1.7;color:#fecaca;
+    overflow-x:auto;white-space:pre;margin:12px 0;}
+  .caos-codigo .erro-linha{background:rgba(239,68,68,.22);display:block;border-left:3px solid #ef4444;}
+  .caos-perguntas{background:rgba(0,0,0,.25);border-radius:10px;padding:14px;font-size:.86rem;line-height:1.7;}
+  .caos-perguntas strong{color:#fca5a5;}
+  .feedback-editor{display:none;background:rgba(0,0,0,.3);border-radius:10px;padding:14px;
+    margin-top:14px;font-size:.86rem;line-height:1.7;color:#fecaca;}
+  .feedback-editor.mostrar{display:block;animation:fadeIn .3s ease-out;}
+  .feedback-editor p{margin-bottom:10px;}
+  .feedback-editor code{background:rgba(255,255,255,.12);color:#fde047;border-color:rgba(255,255,255,.2);}
+  .card-aluno{background:#f8fafc;border:2px solid var(--border-light);border-left:6px solid var(--primary);border-radius:14px;padding:20px;margin-bottom:24px;}
+  .campos-aluno{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:10px;}
+  .campo-input{width:100%;padding:10px 14px;border:2px solid #cbd5e1;border-radius:8px;
+    font-size:.92rem;outline:none;font-family:inherit;}
+  .campo-input:focus{border-color:var(--primary);}
+  .barra-progresso-box{background:#0f172a;border-radius:10px;padding:12px 18px;margin-bottom:20px;
+    color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .barra-fundo{flex:1;min-width:140px;height:10px;background:#334155;border-radius:5px;overflow:hidden;}
+  .barra-preenchimento{height:100%;width:0%;background:linear-gradient(90deg,#fb923c,#10b981);transition:width .3s;}
+  .question{background:#f8fafc;border-radius:12px;padding:18px 20px;margin-bottom:16px;
+    border-left:4px solid var(--primary);border-top:1px solid var(--border-light);
+    border-right:1px solid var(--border-light);border-bottom:1px solid var(--border-light);}
+  .question.correta-q{border-left-color:#16a34a;background:#f0fdf4;}
+  .question.errada-q{border-left-color:#dc2626;background:#fef2f2;}
+  .question-header{font-weight:700;color:#0f172a;margin-bottom:12px;display:flex;
+    align-items:flex-start;gap:10px;font-size:.96rem;line-height:1.5;}
+  .question-number{background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;
+    text-align:center;line-height:26px;font-size:12px;font-weight:bold;flex-shrink:0;margin-top:2px;}
+  .question.correta-q .question-number{background:#16a34a;}
+  .question.errada-q .question-number{background:#dc2626;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .option{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;
+    border-radius:8px;border:2px solid var(--border-light);cursor:pointer;
+    transition:var(--transicao);font-size:.9rem;}
+  .option:hover:not(.disabled){border-color:var(--primary);background:#fff7ed;transform:translateX(3px);}
+  .option.correct{border-color:#16a34a!important;background:#dcfce7!important;color:#15803d;}
+  .option.wrong{border-color:#dc2626!important;background:#fee2e2!important;color:#b91c1c;}
+  .option.disabled{cursor:default;}
+  .option input{accent-color:var(--primary);}
+  .feedback-imediato{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.85rem;line-height:1.55;display:none;}
+  .feedback-imediato.mostrar{display:block;}
+  .feedback-imediato.ok{background:#dcfce7;color:#15803d;border-left:4px solid #16a34a;}
+  .feedback-imediato.no{background:#fee2e2;color:#b91c1c;border-left:4px solid #dc2626;}
+  .btn-grupo{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+  .btn{background:linear-gradient(135deg,var(--primary),#c2410c);color:#fff;border:none;
+    padding:12px 26px;border-radius:30px;cursor:pointer;font-size:.95rem;font-weight:700;
+    transition:var(--transicao);font-family:inherit;}
+  .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(234,88,12,.35);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-secondary{background:#64748b;}
+  .btn-success{background:#10b981;}
+  .result-box{background:#fff;border-radius:16px;padding:24px;text-align:center;
+    border:3px solid var(--primary);display:none;margin-top:24px;box-shadow:0 10px 30px rgba(234,88,12,.15);}
+  .score{font-size:3.2rem;font-weight:900;color:var(--primary);}
+  .relatorio-textarea{width:100%;height:130px;font-family:monospace;font-size:.82rem;
+    border:1px solid #cbd5e1;border-radius:8px;padding:10px;margin:12px 0;
+    background:#f8fafc;color:#334155;resize:vertical;}
+  .toast-notificacao{position:fixed;bottom:24px;right:24px;background:#10b981;color:#fff;
+    padding:12px 20px;border-radius:10px;font-weight:bold;font-size:.85rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);display:none;z-index:9999;animation:slideUp .3s ease;}
+  @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .footer-card{background:#fff;border-radius:var(--radius-main);padding:28px;
+    margin-top:30px;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center;}
+  .footer-link{display:flex;align-items:center;gap:12px;padding:14px 22px;background:#f8fafc;
+    border-radius:12px;text-decoration:none;color:#2c3e50;border:2px solid #28a745;
+    font-size:.95rem;max-width:480px;margin:0 auto;}
+  .btn-top{position:fixed;bottom:20px;right:20px;background:var(--primary);color:#fff;
+    border:none;padding:10px 18px;border-radius:50px;cursor:pointer;font-size:12px;
+    font-weight:700;box-shadow:0 4px 15px rgba(0,0,0,.25);z-index:100;}
+  #area-impressao{display:none;}
+  @media print{
+    .container,.btn-top,.footer-card,.btn-grupo,.tabs-nav,.preview-inline,.diag-seletor{display:none!important;}
+    body{background:#fff!important;color:#000!important;padding:0!important;}
+    #area-impressao{display:block!important;padding:15mm!important;font-family:Arial,sans-serif!important;font-size:10.5pt!important;}
+    .print-header{border-bottom:2px solid #ea580c;padding-bottom:10px;margin-bottom:16px;}
+    .print-header h1{font-size:14pt;color:#c2410c;}
+    .print-q{page-break-inside:avoid;border-left:3px solid #ea580c;padding:6px 10px;margin-bottom:10px;}
+    .print-q h4{font-size:10pt;color:#0f172a;margin-bottom:4px;}
+    .print-q .resp{background:#f1f5f9;padding:4px 8px;border-radius:4px;font-size:9pt;}
+  }
+  @media (max-width:768px){
+    .wireframe-container,.campos-aluno,.corpo-duplo,.paineis-duplos{grid-template-columns:1fr;}
+    .header h1{font-size:1.6rem;}
+    .card{padding:18px 14px;}
+    .tab-btn{padding:10px 14px;font-size:.8rem;}
+    .preview-inline iframe{height:320px;}
+    .nivel-filhos{padding-left:12px;}
+    .nivel-arvore{padding:10px;}
+    .bloco-disponivel{padding:6px 10px;font-size:.74rem;}
+    .etapa-chip{min-width:120px;font-size:.72rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="inicio">
+  <header class="header">
+    <h1>🧱 TEMA <span>03</span> &bull; Introdução ao HTML</h1>
+    <p>A linguagem de marcação que estrutura a World Wide Web: estrutura fundamental, layout semântico, hipermídia e diagnóstico de estrutura</p>
+    <div class="badge-group">
+      <span class="badge">🧱 Estrutura &amp; Tags</span>
+      <span class="badge">📐 Layout Semântico HTML5</span>
+      <span class="badge">🔗 Hiperlinks &amp; Protocolos</span>
+      <span class="badge">🧭 Diagnóstico de Estrutura</span>
+      <span class="badge">🚨 Modo Caos</span>
+      <span class="badge">📝 Avaliação</span>
+      <span class="badge v14">v14 • Julgar com cards visuais</span>
+    </div>
+  </header>
+
+  <nav class="tabs-nav">
+    <button type="button" class="tab-btn active" data-aba="aba-anatomia">🧱 1. Anatomia</button>
+    <button type="button" class="tab-btn" data-aba="aba-semantica">📐 2. Semântica</button>
+    <button type="button" class="tab-btn" data-aba="aba-labs">💻 3. Labs (consulta)</button>
+    <button type="button" class="tab-btn" data-aba="aba-diag">🧭 4. Diagnóstico de Estrutura</button>
+    <button type="button" class="tab-btn" data-aba="aba-caos">🚨 5. Modo Caos</button>
+    <button type="button" class="tab-btn" data-aba="aba-avaliacao">📝 6. Avaliação</button>
+  </nav>
+
+  <div id="aba-anatomia" class="tab-content active">
+    <section class="card">
+      <h2>🧱 1. Estrutura Fundamental do Documento HTML</h2>
+      <div class="highlight-box orange">
+        💡 <strong>Conceito Fundamental:</strong> O <strong>HTML (HyperText Markup Language)</strong> não processa cálculos nem executa loops (não é linguagem de programação). Trata-se de uma <strong>linguagem de marcação</strong>: usa "etiquetas" (tags) para delimitar o papel estrutural de cada elemento para o navegador.
+      </div>
+      <h3>🏷️ Anatomia de uma Tag: Abertura, Atributos e Conteúdo</h3>
+      <p>Um elemento HTML com conteúdo funciona como um envelope delimitado por abertura e fechamento:</p>
+      <div class="anatomia-tag" role="img" aria-label="Exemplo de tag a com atributos href e target">
+        <code class="tok-punct">&lt;</code><code class="tok-tag">a</code> <code class="tok-attr">href</code><code class="tok-punct">=</code><code class="tok-string">"https://w3c.org"</code> <code class="tok-attr">target</code><code class="tok-punct">=</code><code class="tok-string">"_blank"</code><code class="tok-punct">&gt;</code><code class="tok-text">Acessar W3C</code><code class="tok-punct">&lt;/</code><code class="tok-tag">a</code><code class="tok-punct">&gt;</code>
+      </div>
+      <table class="tabela-logica">
+        <thead><tr><th>Componente</th><th>Exemplo</th><th>Função Técnica</th></tr></thead>
+        <tbody>
+          <tr><td>Tag de Abertura</td><td><code>&lt;a ...&gt;</code></td><td>Marca o início do elemento na árvore do DOM.</td></tr>
+          <tr><td>Atributo (Chave)</td><td><code>href</code>, <code>target</code>, <code>id</code>, <code>class</code></td><td>Propriedade que altera ou parametriza o comportamento.</td></tr>
+          <tr><td>Valor do Atributo</td><td><code>"https://w3c.org"</code></td><td>Dado atribuído à propriedade.</td></tr>
+          <tr><td>Conteúdo</td><td><code>Acessar W3C</code></td><td>Informação visível ou elemento aninhado.</td></tr>
+          <tr><td>Tag de Fechamento</td><td><code>&lt;/a&gt;</code></td><td>Finaliza o escopo do elemento.</td></tr>
+        </tbody>
+      </table>
+      <h3>🌳 A Árvore do Documento: <code>&lt;head&gt;</code> vs <code>&lt;body&gt;</code></h3>
+      <div class="arvore-html">
+        <div class="no-arvore" data-no="html">
+          <div class="rotulo-no">&lt;html&gt;</div>
+          <div class="fio">A raiz. Envolve TODO o documento.</div>
+          <div class="filhos">
+            <div class="no-arvore" data-no="head">
+              <div class="rotulo-no">&lt;head&gt;</div>
+              <div class="fio">Invisível ao usuário. Guarda metadados técnicos.</div>
+              <div class="filhos">
+                <div class="no-arvore" data-no="meta"><div class="rotulo-no">&lt;meta&gt; / &lt;title&gt;</div><div class="fio">Configuram codificação e título da aba.</div></div>
+              </div>
+            </div>
+            <div class="no-arvore" data-no="body">
+              <div class="rotulo-no">&lt;body&gt;</div>
+              <div class="fio">Tudo o que o usuário vê e com o que interage.</div>
+              <div class="filhos">
+                <div class="no-arvore" data-no="conteudo"><div class="rotulo-no">&lt;h1&gt; / &lt;p&gt; / &lt;img&gt;</div><div class="fio">Elementos de conteúdo renderizados na tela.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="explicacao-arvore" id="explicacaoArvore">
+          <h5>👆 Clique em um bloco da árvore</h5>
+          <p><strong>head</strong> é a ficha técnica; <strong>body</strong> é o palco visual.</p>
+        </div>
+      </div>
+      <div class="highlight-box blue">
+        🔍 <strong>Elementos Vazios (Void Elements):</strong> Diferente dos elementos comuns, que funcionam como envelopes com texto dentro, tags como <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;input&gt;</code> e <code>&lt;meta&gt;</code> são elementos vazios: <strong>não possuem tag de fechamento</strong> (nunca escreva <code>&lt;/img&gt;</code>) e inserem o recurso de forma autocontida através de seus atributos.
+      </div>
+    </section>
+  </div>
+
+  <div id="aba-semantica" class="tab-content">
+    <section class="card">
+      <h2>📐 2. Layout Semântico</h2>
+      <p>O HTML5 introduziu tags semânticas para comunicar a função de cada bloco:</p>
+      <div class="wireframe-container">
+        <div class="mockup-blueprint">
+          <div class="bloco-semantico ativo" data-sem="header">&lt;header&gt;</div>
+          <div class="bloco-semantico" data-sem="nav">&lt;nav&gt;</div>
+          <div class="corpo-duplo">
+            <div class="main-bloco">
+              <div class="bloco-semantico" data-sem="main">&lt;main&gt;</div>
+              <div class="bloco-semantico" data-sem="section">&lt;section&gt;</div>
+              <div class="bloco-semantico" data-sem="article">&lt;article&gt;</div>
+            </div>
+            <div class="bloco-semantico" style="display:flex;align-items:center;justify-content:center;" data-sem="aside">&lt;aside&gt;</div>
+          </div>
+          <div class="bloco-semantico" data-sem="figure">&lt;figure&gt; + &lt;figcaption&gt;</div>
+          <div class="bloco-semantico" data-sem="footer">&lt;footer&gt;</div>
+        </div>
+        <div class="painel-explicacao-semantica" id="painelSemantico">
+          <h4 id="sem-tag-nome">&lt;header&gt;</h4>
+          <p id="sem-tag-desc">Cabeçalho introdutório de uma página ou seção.</p>
+          <code class="sem-codigo-preview" id="sem-tag-codigo">&lt;header&gt; &lt;h1&gt;Meu Portal&lt;/h1&gt; &lt;/header&gt;</code>
+        </div>
+      </div>
+      <div class="highlight-box purple">
+        ⚖️ <strong>section vs article:</strong> article = autônomo (post, notícia compartilhável); section = temático agrupador (Sobre, Preços, Depoimentos).
+      </div>
+    </section>
+  </div>
+
+  <div id="aba-labs" class="tab-content">
+    <section class="card">
+      <h2>💻 3. Laboratórios — Código de Referência</h2>
+      <p>Cinco projetos completos para consulta.</p>
+
+      <h3>📰 Lab 1: Portal de Notícias</h3>
+      <div class="code-wrapper" id="card-lab1">
+        <div class="code-header">
+          <span class="code-title">📄 lab1-portal-noticias.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="lab1">📋 Copiar</button>
+            <button type="button" class="run-inline-btn" data-preview-inline="lab1">🧪 Preview</button>
+            <button type="button" class="run-oc-btn" data-onecompiler="lab1">▶️ OneCompiler</button>
+            <button type="button" class="download-btn" data-download="lab1">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-abas-nav">
+          <button type="button" class="code-aba-btn active" data-lab="lab1" data-pane="html">HTML</button>
+          <button type="button" class="code-aba-btn" data-lab="lab1" data-pane="css">CSS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab1" data-pane="js">JS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab1" data-pane="tudo">Arquivo Único</button>
+        </div>
+        <div class="code-pane active" id="lab1-pane-html"><pre></pre></div>
+        <div class="code-pane" id="lab1-pane-css"><pre></pre></div>
+        <div class="code-pane" id="lab1-pane-js"><pre></pre></div>
+        <div class="code-pane" id="lab1-pane-tudo"><pre></pre></div>
+      </div>
+
+      <h3>📇 Lab 2: Card de Contatos</h3>
+      <div class="code-wrapper" id="card-lab2">
+        <div class="code-header">
+          <span class="code-title">📄 lab2-card-hipermidia.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="lab2">📋 Copiar</button>
+            <button type="button" class="run-inline-btn" data-preview-inline="lab2">🧪 Preview</button>
+            <button type="button" class="run-oc-btn" data-onecompiler="lab2">▶️ OneCompiler</button>
+            <button type="button" class="download-btn" data-download="lab2">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-abas-nav">
+          <button type="button" class="code-aba-btn active" data-lab="lab2" data-pane="html">HTML</button>
+          <button type="button" class="code-aba-btn" data-lab="lab2" data-pane="css">CSS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab2" data-pane="js">JS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab2" data-pane="tudo">Arquivo Único</button>
+        </div>
+        <div class="code-pane active" id="lab2-pane-html"><pre></pre></div>
+        <div class="code-pane" id="lab2-pane-css"><pre></pre></div>
+        <div class="code-pane" id="lab2-pane-js"><pre></pre></div>
+        <div class="code-pane" id="lab2-pane-tudo"><pre></pre></div>
+      </div>
+
+      <h3>📋 Lab 3: Catálogo Técnico</h3>
+      <div class="code-wrapper" id="card-lab3">
+        <div class="code-header">
+          <span class="code-title">📄 lab3-catalogo-listas.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="lab3">📋 Copiar</button>
+            <button type="button" class="run-inline-btn" data-preview-inline="lab3">🧪 Preview</button>
+            <button type="button" class="run-oc-btn" data-onecompiler="lab3">▶️ OneCompiler</button>
+            <button type="button" class="download-btn" data-download="lab3">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-abas-nav">
+          <button type="button" class="code-aba-btn active" data-lab="lab3" data-pane="html">HTML</button>
+          <button type="button" class="code-aba-btn" data-lab="lab3" data-pane="css">CSS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab3" data-pane="js">JS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab3" data-pane="tudo">Arquivo Único</button>
+        </div>
+        <div class="code-pane active" id="lab3-pane-html"><pre></pre></div>
+        <div class="code-pane" id="lab3-pane-css"><pre></pre></div>
+        <div class="code-pane" id="lab3-pane-js"><pre></pre></div>
+        <div class="code-pane" id="lab3-pane-tudo"><pre></pre></div>
+      </div>
+
+      <h3>❓ Lab 4: FAQ com Âncoras</h3>
+      <div class="code-wrapper" id="card-lab4">
+        <div class="code-header">
+          <span class="code-title">📄 lab4-faq-ancoras.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="lab4">📋 Copiar</button>
+            <button type="button" class="run-inline-btn" data-preview-inline="lab4">🧪 Preview</button>
+            <button type="button" class="run-oc-btn" data-onecompiler="lab4">▶️ OneCompiler</button>
+            <button type="button" class="download-btn" data-download="lab4">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-abas-nav">
+          <button type="button" class="code-aba-btn active" data-lab="lab4" data-pane="html">HTML</button>
+          <button type="button" class="code-aba-btn" data-lab="lab4" data-pane="css">CSS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab4" data-pane="js">JS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab4" data-pane="tudo">Arquivo Único</button>
+        </div>
+        <div class="code-pane active" id="lab4-pane-html"><pre></pre></div>
+        <div class="code-pane" id="lab4-pane-css"><pre></pre></div>
+        <div class="code-pane" id="lab4-pane-js"><pre></pre></div>
+        <div class="code-pane" id="lab4-pane-tudo"><pre></pre></div>
+      </div>
+
+      <h3>🚀 Lab 5: Landing Page</h3>
+      <div class="code-wrapper" id="card-lab5">
+        <div class="code-header">
+          <span class="code-title">📄 lab5-landing-produto.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="lab5">📋 Copiar</button>
+            <button type="button" class="run-inline-btn" data-preview-inline="lab5">🧪 Preview</button>
+            <button type="button" class="run-oc-btn" data-onecompiler="lab5">▶️ OneCompiler</button>
+            <button type="button" class="download-btn" data-download="lab5">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-abas-nav">
+          <button type="button" class="code-aba-btn active" data-lab="lab5" data-pane="html">HTML</button>
+          <button type="button" class="code-aba-btn" data-lab="lab5" data-pane="css">CSS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab5" data-pane="js">JS</button>
+          <button type="button" class="code-aba-btn" data-lab="lab5" data-pane="tudo">Arquivo Único</button>
+        </div>
+        <div class="code-pane active" id="lab5-pane-html"><pre></pre></div>
+        <div class="code-pane" id="lab5-pane-css"><pre></pre></div>
+        <div class="code-pane" id="lab5-pane-js"><pre></pre></div>
+        <div class="code-pane" id="lab5-pane-tudo"><pre></pre></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="aba-diag" class="tab-content">
+    <section class="card">
+      <h2>🧭 4. Diagnóstico de Estrutura</h2>
+      <p>Quatro etapas: reconhecer, escolher+justificar, montar a árvore e julgar código de terceiros.</p>
+      <div class="diag-seletor">
+        <button type="button" class="diag-lab-btn active" data-diag-lab="lab1">
+          <span class="titulo">📰 Lab 1 — Portal</span>
+          <span class="sub">Estrutura editorial</span>
+        </button>
+        <button type="button" class="diag-lab-btn" data-diag-lab="lab3">
+          <span class="titulo">📋 Lab 3 — Catálogo</span>
+          <span class="sub">Hierarquia de listas</span>
+        </button>
+        <button type="button" class="diag-lab-btn" data-diag-lab="lab4">
+          <span class="titulo">❓ Lab 4 — FAQ</span>
+          <span class="sub">Âncoras e sanfonas</span>
+        </button>
+      </div>
+      <div id="diag-painel-lab1" class="diag-painel active"></div>
+      <div id="diag-painel-lab3" class="diag-painel"></div>
+      <div id="diag-painel-lab4" class="diag-painel"></div>
+    </section>
+  </div>
+
+  <div id="aba-caos" class="tab-content">
+    <section class="card">
+      <h2>🚨 5. Modo Caos</h2>
+      <div class="caos-wrapper">
+        <h4>📄 cafe-do-dev.html — versão com bugs</h4>
+        <div class="caos-codigo">&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Café do Dev&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+<span class="erro-linha">    &lt;h1&gt;Café do Dev &lt;/header&gt;</span>
+    &lt;p&gt;O melhor café da região.&lt;/p&gt;
+  &lt;/header&gt;
+
+  &lt;section&gt;
+    &lt;h2&gt;Nosso cardápio&lt;/h2&gt;
+<span class="erro-linha">    &lt;img src="expresso.jpg"&gt;</span>
+    &lt;ul&gt;
+      &lt;li&gt;Expresso &mdash; R$ 8,00&lt;/li&gt;
+      &lt;li&gt;Capuccino &mdash; R$ 12,00&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/section&gt;
+
+  &lt;footer&gt;
+<span class="erro-linha">    &lt;a href="contato.html" target="_blank"&gt;Fale conosco&lt;/a&gt;</span>
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+        <div class="caos-perguntas">
+          <strong>🧩 Três erros plantados.</strong>
+          <p style="margin-top:10px;">Dica: tag de fechamento, atributo obrigatório e boa prática de segurança.</p>
+          <button type="button" class="btn" id="btnRevelarCaos" style="margin-top:12px;">👀 Revelar os erros</button>
+        </div>
+        <div class="feedback-editor" id="feedback-caos">
+          <p><strong>Erro 1:</strong> <code>&lt;h1&gt;</code> fechado com <code>&lt;/header&gt;</code>.</p>
+          <p><strong>Erro 2:</strong> <code>&lt;img&gt;</code> sem <code>alt</code>.</p>
+          <p><strong>Erro 3:</strong> <code>target="_blank"</code> sem <code>rel="noopener noreferrer"</code>.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="aba-avaliacao" class="tab-content">
+    <section class="card">
+      <h2>📝 6. Avaliação</h2>
+      <div class="card-aluno">
+        <h4>👤 Identificação</h4>
+        <div class="campos-aluno">
+          <input type="text" id="alunoNome" class="campo-input" placeholder="Nome completo...">
+          <input type="text" id="alunoTurma" class="campo-input" placeholder="Turma (ex.: Front-End 2026)">
+        </div>
+      </div>
+      <div class="barra-progresso-box">
+        <span>Progresso: <strong id="txtProgresso">0 de 15</strong></span>
+        <div class="barra-fundo"><div class="barra-preenchimento" id="fillProgresso"></div></div>
+      </div>
+      <form id="formQuizTema3">
+        <div id="containerQuestoes"></div>
+        <div class="btn-grupo">
+          <button type="button" class="btn" id="btnCorrigir" disabled>✅ Finalizar</button>
+          <button type="button" class="btn btn-secondary" id="btnLimpar">🔄 Limpar</button>
+        </div>
+      </form>
+      <div class="result-box" id="caixaResultado">
+        <h3 style="color:#c2410c;margin-bottom:4px;">📊 Relatório</h3>
+        <div class="score" id="pontuacaoNota">0 / 15</div>
+        <p id="msgDiagnostico" style="font-weight:bold;font-size:1.05rem;margin-bottom:12px;"></p>
+        <div id="listaFeedback"></div>
+        <div style="margin-top:20px;text-align:left;">
+          <label for="txtCopiaRelatorio" style="font-size:.85rem;font-weight:bold;color:#1e1b4b;display:block;margin-bottom:4px;">📋 Resumo para copy/paste:</label>
+          <textarea class="relatorio-textarea" id="txtCopiaRelatorio" readonly></textarea>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+            <button type="button" class="btn btn-secondary" id="btnCopiarRel" disabled>📋 Copiar</button>
+            <button type="button" class="btn btn-success" id="btnImprimir" disabled>🖨️ PDF (A4)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer-card">
+    <h4 style="margin-bottom:12px;color:#c2410c;">📋 Formulário Oficial</h4>
+    <a href="https://forms.gle/zbUB57A4FteUDsKSA" target="_blank" rel="noopener noreferrer" class="footer-link">
+      <span style="font-size:1.6rem;">📝</span>
+      <div style="text-align:left;flex:1;">
+        <strong>Enviar Relatório do Tema 03</strong>
+        <small style="display:block;color:#64748b;font-size:.75rem;">Anexe o PDF ou cole o texto</small>
+      </div>
+    </a>
+  </footer>
+</div>
+
+<div class="toast-notificacao" id="toastNotificacao">✅ Feito!</div>
+
+<div id="area-impressao">
+  <div class="print-header">
+    <h1>🧱 Relatório • Tema 03</h1>
+    <p><strong>Estudante:</strong> <span id="printNome">—</span> &nbsp;|&nbsp; <strong>Turma:</strong> <span id="printTurma">—</span></p>
+    <p><strong>Data:</strong> <span id="printData">—</span> &nbsp;|&nbsp; <strong>Nota:</strong> <span id="printScore">—</span></p>
+  </div>
+  <div id="printQuestoesContainer"></div>
+</div>
+
+<button type="button" class="btn-top" id="btnTopo">⬆️ Topo</button>
+
+<script>
+var CODIGOS_LABS = {
+  lab1: {
+    html: '<header class="topo">\n  <div class="logo">🚀 TechNews 2026</div>\n  <nav class="menu">\n    <a href="#artigo">Artigo</a>\n    <a href="#destaques">Destaques</a>\n    <a href="#contato">Contato</a>\n  </nav>\n</header>\n\n<main class="conteudo-principal">\n  <article id="artigo" class="artigo-box">\n    <header>\n      <h1>A Revolução da Web Semântica no HTML5</h1>\n      <p class="meta">Por <strong>Equipe Front-End</strong> &bull; Atualizado em 2026</p>\n    </header>\n    <p>O HTML5 trouxe um vocabulário semântico que permite a navegadores e buscadores entenderem a função de cada componente.</p>\n    <figure class="foto-destaque">\n      <img src="https://picsum.photos/id/180/600/280" alt="Computador em mesa com código na tela" loading="lazy">\n      <figcaption>Figura 1: A semântica simplifica o desenvolvimento.</figcaption>\n    </figure>\n    <section>\n      <h2>Por que a Semântica Importa?</h2>\n      <p>Além de organizar o código, o layout semântico é indispensável para pessoas que utilizam leitores de tela.</p>\n    </section>\n  </article>\n\n  <aside id="destaques" class="lateral-box">\n    <h3>📌 Destaques da Semana</h3>\n    <ul>\n      <li><a href="#">Novo padrão Living Standard</a></li>\n      <li><a href="#">Acessibilidade desde o HTML</a></li>\n    </ul>\n  </aside>\n</main>\n\n<footer id="contato" class="rodape">\n  <p>&copy; 2026 TechNews</p>\n</footer>',
+    css: '*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;background:#f8fafc;color:#1e293b;padding:20px}.topo{background:#0f172a;color:#fff;padding:18px 24px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}.logo{font-size:1.2rem;font-weight:bold;color:#fb923c}.menu a{color:#cbd5e1;text-decoration:none;margin-left:16px;font-weight:600}.menu a:hover{color:#fb923c}.conteudo-principal{display:grid;grid-template-columns:2.5fr 1fr;gap:20px;margin-top:20px}.artigo-box{background:#fff;padding:24px;border-radius:12px}.artigo-box h1{color:#c2410c;margin-bottom:8px}.meta{color:#64748b;font-size:.85rem;margin-bottom:16px}.foto-destaque img{width:100%;border-radius:8px}.foto-destaque figcaption{font-size:.8rem;color:#64748b;margin-top:6px;font-style:italic}.lateral-box{background:#f1f5f9;padding:20px;border-radius:12px;height:fit-content}.rodape{background:#0f172a;color:#94a3b8;text-align:center;padding:16px;border-radius:12px;margin-top:20px}@media(max-width:768px){.conteudo-principal{grid-template-columns:1fr}}',
+    js: 'console.log("Portal carregado.");'
+  },
+  lab2: {
+    html: '<div class="card-perfil">\n  <header class="perfil-topo">\n    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" alt="Foto da desenvolvedora Ana Silva" class="avatar" loading="lazy">\n    <h2>Ana Silva</h2>\n    <p class="profissao">Front-End &bull; <mark>HTML5 &amp; CSS3</mark></p>\n  </header>\n  <section class="acoes-contato">\n    <h3>Canais:</h3>\n    <a href="tel:+5511999990000" class="btn-link fone">📞 Ligar</a>\n    <a href="mailto:ana@exemplo.com" class="btn-link email">✉️ E-mail</a>\n    <a href="https://wa.me/5511999990000" target="_blank" rel="noopener noreferrer" class="btn-link whats">💬 WhatsApp</a>\n  </section>\n</div>',
+    css: '*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;background:#090d16;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.card-perfil{background:#fff;max-width:360px;width:100%;border-radius:16px;overflow:hidden}.perfil-topo{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;padding:26px;text-align:center}.avatar{width:90px;height:90px;border-radius:50%;border:3px solid #fff;object-fit:cover}mark{background:#fef08a;padding:1px 6px;border-radius:4px;color:#854d0e}.acoes-contato{padding:20px;display:flex;flex-direction:column;gap:10px}.btn-link{display:flex;align-items:center;justify-content:center;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;color:#fff}.fone{background:#0284c7}.email{background:#ea580c}.whats{background:#16a34a}',
+    js: 'console.log("Card carregado.");'
+  },
+  lab3: {
+    html: '<div class="catalogo-box">\n  <header><h2>📦 Catálogo Técnico</h2></header>\n  <section class="modulo-lista">\n    <h3>Etapas de Montagem:</h3>\n    <ol type="A" start="5" class="lista-letras">\n      <li>Fixação da placa-mãe no chassi</li>\n      <li>Conexão dos cabos SATA\n        <ul class="sublista">\n          <li>Canal Primário (Slot A2)</li>\n          <li>Canal Secundário (Slot B2)</li>\n        </ul>\n      </li>\n    </ol>\n  </section>\n  <section class="modulo-lista">\n    <h3>Top Componentes:</h3>\n    <ol reversed class="lista-regressiva">\n      <li>Fonte Modular 750W &bull; <ins>R$ 499,00</ins> <del>R$ 620,00</del></li>\n      <li>Gabinete Airflow RGB &bull; <ins>R$ 380,00</ins></li>\n      <li>Processador 8-Core &bull; <mark>Campeão</mark></li>\n    </ol>\n  </section>\n</div>',
+    css: '*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;background:#0f172a;padding:24px;display:flex;justify-content:center}.catalogo-box{background:#fff;max-width:620px;width:100%;border-radius:16px;padding:26px}.catalogo-box h2{color:#c2410c;font-size:1.4rem}.modulo-lista{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin:12px 0}.lista-letras{margin-left:24px;line-height:1.8;font-weight:600}.sublista{margin:6px 0 8px 20px;color:#64748b;list-style-type:circle}.lista-regressiva{margin-left:24px;line-height:2;font-weight:600}ins{color:#16a34a;text-decoration:none}del{color:#94a3b8;font-size:.85em}mark{background:#fef08a;padding:2px 6px;border-radius:4px;color:#854d0e}',
+    js: 'console.log("Catálogo carregado.");'
+  },
+  lab4: {
+    html: '<div class="faq-container" id="inicio-faq">\n  <nav class="indice-ancoras"><strong>Navegação Rápida:</strong> <a href="#pergunta-1">Dúvida 1</a> &bull; <a href="#pergunta-2">Dúvida 2</a> &bull; <a href="#pergunta-3">Dúvida 3</a></nav>\n  <h2>❓ FAQ HTML5</h2>\n  <details id="pergunta-1" class="faq-item" open>\n    <summary>O que são elementos de bloco e inline?</summary>\n    <p>Bloco ocupa toda a largura; inline ocupa só o conteúdo.</p>\n  </details>\n  <details id="pergunta-2" class="faq-item">\n    <summary>Por que a tag a com name é obsoleta?</summary>\n    <p>Use id em qualquer elemento de destino.</p>\n  </details>\n  <details id="pergunta-3" class="faq-item">\n    <summary>O que acontece sem alt na imagem?</summary>\n    <p>Leitores de tela não descrevem a imagem.</p>\n  </details>\n  <div style="text-align:center;margin-top:18px"><a href="#inicio-faq" class="btn-subir">&uarr; Voltar</a></div>\n</div>',
+    css: '*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Segoe UI,sans-serif;background:#0f172a;padding:24px;display:flex;justify-content:center}.faq-container{background:#fff;max-width:640px;width:100%;border-radius:16px;padding:28px}.indice-ancoras{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px;margin-bottom:20px}.indice-ancoras a{color:#0284c7;text-decoration:none;font-weight:bold}.faq-container h2{color:#c2410c;margin-bottom:16px}.faq-item{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;margin-bottom:12px;padding:14px}.faq-item[open]{border-color:#ea580c;background:#fff7ed}summary{font-weight:bold;cursor:pointer}.btn-subir{font-size:.8rem;color:#64748b;text-decoration:none;font-weight:bold}',
+    js: 'console.log("FAQ carregado.");'
+  },
+  lab5: {
+    html: '<div class="landing-page">\n  <header class="hero-topo">\n    <div class="tag-promo">Lançamento 2026</div>\n    <h1>DevPad Pro</h1>\n    <p>O teclado dos desenvolvedores.</p>\n    <a href="#comprar" class="btn-cta">Garantir &rarr;</a>\n  </header>\n  <main class="secoes-produto">\n    <section class="especificacoes">\n      <h2>Especificações</h2>\n      <ol>\n        <li>Alumínio aeronáutico</li>\n        <li>Tri-modo: USB-C, 2.4GHz, BT 5.3</li>\n        <li>Keycaps PBT</li>\n      </ol>\n    </section>\n    <figure class="destaque-imagem">\n      <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&h=280&q=80" alt="Teclado mecânico iluminado" loading="lazy">\n      <figcaption>Hardware minimalista.</figcaption>\n    </figure>\n    <section id="comprar" class="card-checkout">\n      <h3>Adquira agora</h3>\n      <p>De <del>R$ 790</del> por <strong><ins>R$ 549</ins></strong> no PIX.</p>\n      <a href="mailto:vendas@devpad.com" class="btn-comprar">Finalizar</a>\n    </section>\n  </main>\n  <footer class="rodape-simples"><p>&copy; 2026 DevPad</p></footer>\n</div>',
+    css: '*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;background:#090d16;padding:20px;display:flex;justify-content:center}.landing-page{background:#fff;max-width:680px;width:100%;border-radius:18px;overflow:hidden}.hero-topo{background:linear-gradient(135deg,#1e1b4b,#4338ca);color:#fff;padding:36px 24px;text-align:center}.tag-promo{display:inline-block;background:#fbbf24;color:#1e1b4b;font-size:.72rem;font-weight:800;padding:4px 12px;border-radius:20px}.btn-cta{display:inline-block;background:#fb923c;color:#0f172a;padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:bold}.secoes-produto{padding:26px}.destaque-imagem img{width:100%;border-radius:12px}.card-checkout{background:#f0fdf4;border:2px solid #86efac;border-radius:12px;padding:20px;text-align:center}.btn-comprar{display:inline-block;background:#16a34a;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none}.rodape-simples{background:#f8fafc;padding:16px;text-align:center;font-size:.8rem}',
+    js: 'console.log("Landing carregada.");'
+  }
+};
+
+function montarArquivoUnico(lab) {
+  var escapa = function (t) { return String(t).replace(/<\/script>/gi, '<\\/script>'); };
+  return '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Lab HTML5</title>\n  <style>\n' + lab.css + '\n  </style>\n</head>\n<body>\n' + lab.html + '\n  <script>\n' + escapa(lab.js) + '\n  <\/script>\n</body>\n</html>';
+}
+
+function escapeHtmlTexto(t) {
+  return String(t == null ? '' : t)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+var DIAGNOSTICO = {
+  lab1: {
+    titulo: '📰 Lab 1 — Portal', subtitulo: 'Estrutura editorial',
+    etapas: {
+      reconhecer: {
+        regioes: [
+          { id: 'r1', label: 'TechNews 2026', correto: 'Marca da página (topo introdutório)', opcoes: ['Marca da página (topo introdutório)', 'Lista de links de navegação', 'Conteúdo principal'] },
+          { id: 'r2', label: 'Artigo • Destaques • Contato', correto: 'Lista de links de navegação', opcoes: ['Marca da página (topo introdutório)', 'Lista de links de navegação', 'Conteúdo principal'] },
+          { id: 'r3', label: 'A Revolução da Web Semântica', correto: 'Conteúdo principal', opcoes: ['Marca da página (topo introdutório)', 'Lista de links de navegação', 'Conteúdo principal'] }
+        ]
+      },
+      escolher: {
+        regioes: [
+          { id: 'e1', descricao: 'Bloco que abriga a marca "TechNews 2026" e a barra de navegação, no topo da página.', tagCorreta: 'header', tags: ['header','main','aside'],
+            justificativas: [
+              { t: 'Porque abriga a introdução da página: marca, slogan e navegação.', correta: true },
+              { t: 'Porque é o conteúdo principal da página.', correta: false },
+              { t: 'Porque é a área descartável de rodapé.', correta: false }
+            ] },
+          { id: 'e2', descricao: 'Área que contém a matéria "A Revolução da Web Semântica" e é única na página.', tagCorreta: 'article', tags: ['article','section','nav'],
+            justificativas: [
+              { t: 'Porque é conteúdo autônomo: poderia ser compartilhado num feed sem depender do resto da página.', correta: true },
+              { t: 'Porque agrupa apenas links de navegação.', correta: false },
+              { t: 'Porque é conteúdo secundário e decorativo.', correta: false }
+            ] },
+          { id: 'e3', descricao: 'Bloco lateral com "Destaques da Semana". Conteúdo periférico relacionado à matéria principal.', tagCorreta: 'aside', tags: ['aside','main','article'],
+            justificativas: [
+              { t: 'Porque é conteúdo periférico e relacionado, não pertence ao fluxo principal.', correta: true },
+              { t: 'Porque é o conteúdo dominante da página.', correta: false },
+              { t: 'Porque é o cabeçalho da página.', correta: false }
+            ] }
+        ]
+      },
+      arvore: {
+        arvoreCorreta: [
+          { tag: 'header', descricao: 'Cabeçalho da página (marca + navegação)', filhos: [
+            { tag: 'nav', descricao: 'Navegação principal', filhos: [] }
+          ] },
+          { tag: 'main', descricao: 'Conteúdo principal único', filhos: [
+            { tag: 'article', descricao: 'Matéria da notícia', filhos: [] },
+            { tag: 'aside', descricao: 'Barra lateral de destaques', filhos: [] }
+          ] },
+          { tag: 'footer', descricao: 'Rodapé', filhos: [] }
+        ],
+        explicacoesErro: {
+          'aside-article': 'O <aside> é irmão do <article>, não filho. Os dois estão dentro de <main>: um é a matéria, o outro a barra lateral.',
+          'nav-main': 'O <nav> pertence ao <header>. Não vai dentro do <main>.',
+          'main-header': 'O <main> é irmão do <header> e do <footer>, na raiz do <body>.',
+          'header-main': 'O <header> fica fora do <main>. É a introdução da página inteira.',
+          'footer-main': 'O <footer> é irmão do <main>. O rodapé fecha a página.',
+          'aside-main': 'O <aside> é filho do <main>, ao lado do <article>.',
+          'nav-aside': 'O <nav> vai dentro do <header>, não do <aside>.',
+          'article-aside': 'O <article> e o <aside> são irmãos dentro do <main>.'
+        }
+      },
+      julgar: {
+        pergunta: 'Qual destas versões é semanticamente válida para o topo de um portal de notícias?',
+        versoes: [
+          { id: 'v1', titulo: 'Versão A (Divite e spans)', codigo: '<div class="topo">\n  <div class="logo">TechNews</div>\n  <div class="menu">\n    <span>Artigo</span>\n    <span>Contato</span>\n  </div>\n</div>', correta: false, motivo: 'Usa <div> genérica sem papel semântico de cabeçalho e <span> sem href para navegação. Não permite foco de teclado nem anúncio em leitores de tela.' },
+          { id: 'v2', titulo: 'Versão B (Padrão Semântico HTML5)', codigo: '<header>\n  <div class="logo">TechNews</div>\n  <nav>\n    <a href="#artigo">Artigo</a>\n    <a href="#contato">Contato</a>\n  </nav>\n</header>', correta: true, motivo: 'Estrutura canônica: <header> delimita o topo e <nav> com âncoras <a> forma uma barra de navegação acessível por teclado e reconhecida por robôs de busca.' },
+          { id: 'v3', titulo: 'Versão C (Inversão hierárquica)', codigo: '<nav>\n  <main>\n    <a href="#artigo">Artigo</a>\n  </main>\n</nav>', correta: false, motivo: 'Inversão grave: o <main> é o conteúdo dominante da página e nunca pode ser filho de um <nav>. O topo também não deve ser envolvido por <nav> como raiz.' }
+        ]
+      }
+    }
+  },
+  lab3: {
+    titulo: '📋 Lab 3 — Catálogo', subtitulo: 'Hierarquia de listas',
+    etapas: {
+      reconhecer: {
+        regioes: [
+          { id: 'r1', label: 'Etapas de Montagem (A, B...)', correto: 'Lista ordenada — sequência com letras', opcoes: ['Lista ordenada — sequência com letras', 'Lista não ordenada — itens sem ordem', 'Item isolado'] },
+          { id: 'r2', label: 'Canal Primário / Canal Secundário', correto: 'Lista aninhada — itens secundários', opcoes: ['Lista ordenada — sequência com letras', 'Lista aninhada — itens secundários', 'Item isolado'] },
+          { id: 'r3', label: 'Fonte 750W — Campeão', correto: 'Lista ordenada regressiva', opcoes: ['Lista ordenada — sequência com letras', 'Lista não ordenada — itens sem ordem', 'Lista ordenada regressiva'] }
+        ]
+      },
+      escolher: {
+        regioes: [
+          { id: 'e1', descricao: 'Sequência de etapas numeradas (passo A, B, C) para ligar placas.', tagCorreta: 'ol', tags: ['ol','ul','dl'],
+            justificativas: [
+              { t: 'Porque há ordem: a sequência importa. <ol> (Ordered List) representa etapas numeradas.', correta: true },
+              { t: 'Porque a ordem dos itens não importa.', correta: false },
+              { t: 'Porque é uma lista de definições de termos.', correta: false }
+            ] },
+          { id: 'e2', descricao: 'Subitens "Canal Primário" e "Canal Secundário" dentro de uma etapa da lista numerada.', tagCorreta: 'ul', tags: ['ul','ol','dl'],
+            justificativas: [
+              { t: 'Porque são itens sem ordem definida entre eles: apenas uma sublista do passo anterior.', correta: true },
+              { t: 'Porque são etapas numeradas de uma sequência.', correta: false },
+              { t: 'Porque são termos com suas definições.', correta: false }
+            ] },
+          { id: 'e3', descricao: 'Itens individuais de uma lista (cada linha de texto dentro de <ol> ou <ul>).', tagCorreta: 'li', tags: ['li','p','span'],
+            justificativas: [
+              { t: '<li> (List Item) representa cada item de uma lista ordenada ou não ordenada.', correta: true },
+              { t: '<p> representa um parágrafo, que pode estar dentro de um item, mas não é o item.', correta: false },
+              { t: '<span> agrupa conteúdo em linha, sem papel estrutural de item.', correta: false }
+            ] }
+        ]
+      },
+      arvore: {
+        arvoreCorreta: [
+          { tag: 'section', descricao: 'Bloco temático de montagem', filhos: [
+            { tag: 'h3', descricao: 'Título da seção (ex.: Etapas de Montagem)', filhos: [] },
+            { tag: 'ol', descricao: 'Lista ordenada de etapas (A, B, C…)', filhos: [
+              { tag: 'li', descricao: 'Primeiro item: fixação da placa-mãe', filhos: [] },
+              { tag: 'li', descricao: 'Segundo item: conexão dos cabos SATA', filhos: [
+                { tag: 'ul', descricao: 'Sublista não ordenada de canais', filhos: [
+                  { tag: 'li', descricao: 'Canal Primário (Slot A2)', filhos: [] },
+                  { tag: 'li', descricao: 'Canal Secundário (Slot B2)', filhos: [] }
+                ] }
+              ] }
+            ] }
+          ] }
+        ],
+        explicacoesErro: {
+          'li-h3': 'O <li> é filho de <ol> ou <ul>. Não vai dentro do título <h3>.',
+          'h3-ol': 'O <h3> é irmão do <ol>, dentro do <section>. O título fica fora da lista.',
+          'ol-p': 'O <ol> não recebe <p> como filho. Cada linha é um <li>.',
+          'h3-li': 'O <h3> não vai dentro do <li>. Fica ao lado do <ol>.',
+          'ul-ol': 'A sublista é <ul> (sem ordem), não <ol>. Os canais Primário e Secundário são paralelos, sem sequência própria.',
+          'ol-ul': 'A lista externa é <ol> (com ordem A, B…). A interna é <ul> (sem ordem).',
+          'li-ul': 'O <ul> vai dentro do <li> que representa o passo pai, não solto dentro do <ol>.',
+          'ul-li': 'O <li> é filho do <ul> que lista os canais. Confira o nível.',
+          'section-ol': 'O <section> envolve o <h3> e o <ol>. O <ol> não é raiz.',
+          'ol-section': 'O <section> é a raiz. O <ol> vai dentro dele.'
+        }
+      },
+      julgar: {
+        pergunta: 'Qual destas versões representa corretamente uma lista aninhada de canais de memória?',
+        versoes: [
+          { id: 'v1', titulo: 'Versão A (Sublista interna ao item pai)', codigo: '<ol>\n  <li>Instalação dos módulos RAM\n    <ul>\n      <li>Canal Primário</li>\n      <li>Canal Secundário</li>\n    </ul>\n  </li>\n</ol>', correta: true, motivo: 'Hierarquia perfeita: a sublista <ul> é filha direta do <li> do passo correspondente, garantindo correlação direta na árvore de acessibilidade.' },
+          { id: 'v2', titulo: 'Versão B (Sublista solta como irmã do item)', codigo: '<ol>\n  <li>Instalação dos módulos RAM</li>\n  <ul>\n    <li>Canal Primário</li>\n    <li>Canal Secundário</li>\n  </ul>\n</ol>', correta: false, motivo: 'Sintaxe inválida: em HTML5, elementos <ol> e <ul> só podem receber <li> como filhos imediatos. Inserir <ul> direto dentro de <ol> quebra a especificação.' },
+          { id: 'v3', titulo: 'Versão C (Item dentro de item sem lista)', codigo: '<ol>\n  <li>Instalação\n    <li>Canal Primário</li>\n  </li>\n</ol>', correta: false, motivo: 'Erro estrutural: <li> não pode ser filho direto de outro <li>. Todo aninhamento exige um container intermediário (<ol> ou <ul>).' }
+        ]
+      }
+    }
+  },
+  lab4: {
+    titulo: '❓ Lab 4 — FAQ', subtitulo: 'Âncoras e sanfonas',
+    etapas: {
+      reconhecer: {
+        regioes: [
+          { id: 'r1', label: 'Dúvida 1 • Dúvida 2 • Dúvida 3', correto: 'Navegação interna', opcoes: ['Navegação interna', 'Conteúdo do FAQ', 'Rodapé'] },
+          { id: 'r2', label: 'Clique para abrir a resposta', correto: 'Sanfona interativa nativa', opcoes: ['Sanfona interativa nativa', 'Navegação interna', 'Rodapé'] },
+          { id: 'r3', label: '↑ Voltar ao Topo', correto: 'Link de retorno interno', opcoes: ['Link de retorno interno', 'Sanfona interativa nativa', 'Rodapé'] }
+        ]
+      },
+      escolher: {
+        regioes: [
+          { id: 'e1', descricao: 'Bloco que agrupa "Dúvida 1 • Dúvida 2 • Dúvida 3" como sumário interno do FAQ.', tagCorreta: 'nav', tags: ['nav','aside','header'],
+            justificativas: [
+              { t: 'Porque agrupa um conjunto de links de navegação dentro da própria página.', correta: true },
+              { t: 'Porque é conteúdo periférico.', correta: false },
+              { t: 'Porque é o cabeçalho do FAQ.', correta: false }
+            ] },
+          { id: 'e2', descricao: 'Elemento que contém uma pergunta que, ao ser clicada, abre e fecha a resposta, sem JavaScript.', tagCorreta: 'details', tags: ['details','section','article'],
+            justificativas: [
+              { t: '<details> é o widget nativo de sanfona: <summary> é o gatilho e o resto é o conteúdo revelado.', correta: true },
+              { t: '<section> abre e fecha com clique.', correta: false },
+              { t: '<article> é interativo por padrão.', correta: false }
+            ] },
+          { id: 'e3', descricao: 'Título clicável "O que são elementos de bloco e inline?" que abre o conteúdo do <details>.', tagCorreta: 'summary', tags: ['summary','h2','label'],
+            justificativas: [
+              { t: '<summary> é o título clicável obrigatório do <details>.', correta: true },
+              { t: '<h2> abre e fecha o conteúdo.', correta: false },
+              { t: '<label> é o título acessível de um details.', correta: false }
+            ] }
+        ]
+      },
+      arvore: {
+        arvoreCorreta: [
+          { tag: 'nav', descricao: 'Índice de âncoras do FAQ', filhos: [
+            { tag: 'a', descricao: 'Link de navegação interna (#pergunta-1)', filhos: [] }
+          ] },
+          { tag: 'section', descricao: 'Bloco do FAQ', filhos: [
+            { tag: 'details', descricao: 'Sanfona de uma pergunta', filhos: [
+              { tag: 'summary', descricao: 'Pergunta clicável', filhos: [] },
+              { tag: 'p', descricao: 'Resposta revelada', filhos: [] }
+            ] }
+          ] }
+        ],
+        explicacoesErro: {
+          'summary-details': 'O <summary> só funciona como gatilho se for filho direto do <details>.',
+          'p-summary': 'O <summary> é o título clicável e vai antes. A resposta (<p>) fica depois, como irmã do <summary>.',
+          'details-summary': 'É o inverso: o <details> envolve o <summary>.',
+          'nav-section': 'O <nav> e o <section> são irmãos, no mesmo nível.',
+          'a-nav': 'O <a> vai dentro do <nav>.',
+          'section-nav': 'O <section> vem depois do <nav>, como irmão.',
+          'details-p': 'O <p> é irmão do <summary>, dentro do <details>, não pai.',
+          'p-details': 'O <details> envolve o <p>, não o contrário.'
+        }
+      },
+      julgar: {
+        pergunta: 'Qual destas versões é semanticamente válida para a sanfona do FAQ?',
+        versoes: [
+          { id: 'v1', titulo: 'Versão A (Divs sem semântica interativa)', codigo: '<div class="faq-item">\n  <div class="pergunta">O que é HTML?</div>\n  <div class="resposta">Linguagem de marcação.</div>\n</div>', correta: false, motivo: 'Ausência total de acessibilidade nativa: divs não abrem sozinhas, não recebem foco via Tab e exigem criação manual de listeners JS e atributos ARIA.' },
+          { id: 'v2', titulo: 'Versão B (Padrão Nativo details/summary)', codigo: '<details>\n  <summary>O que é HTML?</summary>\n  <p>Linguagem de marcação.</p>\n</details>', correta: true, motivo: 'Uso ideal dos elementos nativos do HTML5: o navegador gerencia o estado de abertura/fechamento, navegação por teclado (Enter/Espaço) e acessibilidade sem JS.' },
+          { id: 'v3', titulo: 'Versão C (Section estática com título)', codigo: '<section>\n  <h2>O que é HTML?</h2>\n  <p>Linguagem de marcação.</p>\n</section>', correta: false, motivo: '<section> é um agrupador temático e <h2> é um título estático. Não oferecem funcionalidade nativa de sanfona expansível por clique.' }
+        ]
+      }
+    }
+  }
+};
+
+var ESTADO_DIAG = {};
+var CHAVE_ARMAZENAMENTO = 'tema03-progresso-v14';
+var TAG_SELECIONADA = {};
+
+function carregarProgresso() {
+  try { var raw = localStorage.getItem(CHAVE_ARMAZENAMENTO); return raw ? JSON.parse(raw) : null; }
+  catch (e) { return null; }
+}
+function salvarProgresso() {
+  try {
+    var dados = { reconhecer: {}, escolher: {}, aninhar: {}, julgar: {} };
+    Object.keys(ESTADO_DIAG).forEach(function (labId) {
+      dados.reconhecer[labId] = ESTADO_DIAG[labId].reconhecer;
+      dados.escolher[labId] = ESTADO_DIAG[labId].escolher;
+      dados.aninhar[labId] = {};
+      Object.keys(ESTADO_DIAG[labId].aninhar.slots).forEach(function (k) {
+        dados.aninhar[labId][k] = ESTADO_DIAG[labId].aninhar.slots[k];
+      });
+      dados.julgar[labId] = ESTADO_DIAG[labId].julgar.escolhido;
+    });
+    localStorage.setItem(CHAVE_ARMAZENAMENTO, JSON.stringify(dados));
+  } catch (e) {}
+}
+
+function montarArvoreVazia(labId) {
+  var dados = DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta;
+  var mapa = {};
+  function percorrer(lista, caminho) {
+    lista.forEach(function (no, i) {
+      var slotId = caminho ? caminho + '-filho-' + i : 'raiz-' + i;
+      mapa[slotId] = null;
+      if (no.filhos && no.filhos.length) percorrer(no.filhos, slotId);
+    });
+  }
+  percorrer(dados, '');
+  return mapa;
+}
+function prefixoPai(slotId) {
+  var idx = slotId.lastIndexOf('-filho-');
+  return idx === -1 ? null : slotId.slice(0, idx);
+}
+function encontrarNoPorSlot(dados, slotId) {
+  var partes = slotId.split('-');
+  if (partes[0] !== 'raiz') return null;
+  var no = dados[parseInt(partes[1], 10)];
+  var i = 2;
+  while (i < partes.length) {
+    if (partes[i] === 'filho') {
+      no = no.filhos[parseInt(partes[i + 1], 10)];
+      i += 2;
+    } else i++;
+  }
+  return no;
+}
+function trilhaSlot(dados, slotId) {
+  var partes = slotId.split('-');
+  if (partes[0] !== 'raiz') return [];
+  var caminho = [dados[parseInt(partes[1], 10)].tag];
+  var no = dados[parseInt(partes[1], 10)];
+  var i = 2;
+  while (i < partes.length) {
+    if (partes[i] === 'filho') {
+      no = no.filhos[parseInt(partes[i + 1], 10)];
+      caminho.push(no.tag);
+      i += 2;
+    } else i++;
+  }
+  return caminho;
+}
+function contarTagsNaArvore(labId) {
+  var contagem = {};
+  function percorrer(lista) {
+    lista.forEach(function (no) {
+      contagem[no.tag] = (contagem[no.tag] || 0) + 1;
+      if (no.filhos) percorrer(no.filhos);
+    });
+  }
+  percorrer(DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta);
+  return contagem;
+}
+function contarAninharCorretos(labId) {
+  var dados = DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta;
+  var slots = ESTADO_DIAG[labId].aninhar.slots;
+  var ok = 0;
+  Object.keys(slots).forEach(function (slotId) {
+    var no = encontrarNoPorSlot(dados, slotId);
+    if (no && slots[slotId] === no.tag) ok++;
+  });
+  return ok;
+}
+
+function inicializarDiagnostico() {
+  var progresso = carregarProgresso();
+  ['lab1', 'lab3', 'lab4'].forEach(function (labId) {
+    var vazio = montarArvoreVazia(labId);
+    var salvos = (progresso && progresso.aninhar && progresso.aninhar[labId]) || {};
+    var slots = {};
+    Object.keys(vazio).forEach(function (k) {
+      slots[k] = (salvos[k] !== undefined) ? salvos[k] : null;
+    });
+    ESTADO_DIAG[labId] = {
+      etapaAtual: 'reconhecer',
+      reconhecer: (progresso && progresso.reconhecer && progresso.reconhecer[labId]) || {},
+      escolher: (progresso && progresso.escolher && progresso.escolher[labId]) || {},
+      aninhar: { slots: slots },
+      julgar: { escolhido: (progresso && progresso.julgar && progresso.julgar[labId]) || null }
+    };
+  });
+
+  document.querySelectorAll('.diag-lab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.diag-lab-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var labId = btn.dataset.diagLab;
+      document.querySelectorAll('.diag-painel').forEach(function (p) { p.classList.remove('active'); });
+      var painel = document.getElementById('diag-painel-' + labId);
+      if (painel) painel.classList.add('active');
+      montarPainelDiag(labId);
+    });
+  });
+
+  ['lab1', 'lab3', 'lab4'].forEach(function (labId) { montarPainelDiag(labId); });
+}
+
+function montarPainelDiag(labId) {
+  var painel = document.getElementById('diag-painel-' + labId);
+  if (!painel || painel.dataset.montado === '1') return;
+  painel.dataset.montado = '1';
+
+  painel.innerHTML =
+    '<div class="etapa-stepper">' +
+      '<button type="button" class="etapa-chip" data-etapa="reconhecer">Etapa 1 — Reconhecer<span class="mini-nota" id="nota-reconhecer-' + labId + '">— / 3</span></button>' +
+      '<button type="button" class="etapa-chip" data-etapa="escolher">Etapa 2 — Escolher e justificar<span class="mini-nota" id="nota-escolher-' + labId + '">— / 3</span></button>' +
+      '<button type="button" class="etapa-chip" data-etapa="aninhar">Etapa 3 — Montar a árvore<span class="mini-nota" id="nota-aninhar-' + labId + '">— / —</span></button>' +
+      '<button type="button" class="etapa-chip" data-etapa="julgar">Etapa 4 — Julgar código<span class="mini-nota" id="nota-julgar-' + labId + '">— / 1</span></button>' +
+    '</div>' +
+    '<div id="bloco-reconhecer-' + labId + '" class="etapa-bloco"></div>' +
+    '<div id="bloco-escolher-' + labId + '" class="etapa-bloco"></div>' +
+    '<div id="bloco-aninhar-' + labId + '" class="etapa-bloco"></div>' +
+    '<div id="bloco-julgar-' + labId + '" class="etapa-bloco"></div>';
+
+  painel.querySelectorAll('.etapa-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () { mudarEtapaDiag(labId, chip.dataset.etapa); });
+  });
+
+  renderizarReconhecer(labId);
+  renderizarEscolher(labId);
+  renderizarAninhar(labId);
+  renderizarJulgar(labId);
+  mudarEtapaDiag(labId, ESTADO_DIAG[labId].etapaAtual || 'reconhecer');
+}
+
+function calcularNotas(labId) {
+  var estado = ESTADO_DIAG[labId];
+  if (!estado) return;
+  var reconhecerOk = Object.values(estado.reconhecer).filter(Boolean).length;
+  var escolherOk = Object.values(estado.escolher).filter(Boolean).length;
+  var aninharTotal = Object.keys(estado.aninhar.slots).length;
+  var aninharCorretos = contarAninharCorretos(labId);
+  var julgarOk = estado.julgar.escolhido ? 1 : 0;
+
+  var notaRec = document.getElementById('nota-reconhecer-' + labId);
+  var notaEsc = document.getElementById('nota-escolher-' + labId);
+  var notaAni = document.getElementById('nota-aninhar-' + labId);
+  var notaJul = document.getElementById('nota-julgar-' + labId);
+  if (notaRec) { notaRec.textContent = reconhecerOk + ' / 3'; notaRec.style.color = reconhecerOk >= 3 ? '#15803d' : ''; }
+  if (notaEsc) { notaEsc.textContent = escolherOk + ' / 3'; notaEsc.style.color = escolherOk >= 3 ? '#15803d' : ''; }
+  if (notaAni) { notaAni.textContent = aninharCorretos + ' / ' + aninharTotal; notaAni.style.color = aninharCorretos === aninharTotal ? '#15803d' : ''; }
+  if (notaJul) { notaJul.textContent = julgarOk + ' / 1'; notaJul.style.color = julgarOk >= 1 ? '#15803d' : ''; }
+
+  var painel = document.getElementById('diag-painel-' + labId);
+  if (!painel) return;
+  painel.querySelectorAll('.etapa-chip').forEach(function (chip) {
+    var etapa = chip.dataset.etapa;
+    var concluida = false;
+    if (etapa === 'reconhecer') concluida = reconhecerOk >= 3;
+    else if (etapa === 'escolher') concluida = escolherOk >= 3;
+    else if (etapa === 'aninhar') concluida = aninharTotal > 0 && aninharCorretos === aninharTotal;
+    else if (etapa === 'julgar') concluida = julgarOk >= 1;
+    chip.classList.toggle('concluida', concluida);
+  });
+}
+
+function mudarEtapaDiag(labId, etapa) {
+  if (!ESTADO_DIAG[labId]) return;
+  ESTADO_DIAG[labId].etapaAtual = etapa;
+  ['reconhecer', 'escolher', 'aninhar', 'julgar'].forEach(function (e) {
+    var bloco = document.getElementById('bloco-' + e + '-' + labId);
+    if (bloco) bloco.classList.toggle('ativa', e === etapa);
+  });
+  var painel = document.getElementById('diag-painel-' + labId);
+  if (painel) {
+    painel.querySelectorAll('.etapa-chip').forEach(function (chip) {
+      chip.classList.toggle('ativa', chip.dataset.etapa === etapa);
+    });
+  }
+  calcularNotas(labId);
+}
+
+function renderizarReconhecer(labId) {
+  var el = document.getElementById('bloco-reconhecer-' + labId);
+  if (!el) return;
+  var dados = DIAGNOSTICO[labId].etapas.reconhecer.regioes;
+  var html = '<div class="highlight-box blue"><strong>Objetivo:</strong> sem ver código ainda, identifique o papel de cada região. Clique numa região para responder.</div><div class="wireframe-diag">';
+  dados.forEach(function (r) {
+    var jaFeito = ESTADO_DIAG[labId].reconhecer[r.id];
+    html += '<div class="regiao-diag' + (jaFeito ? ' correta' : '') + '" data-regiao="' + r.id + '">' +
+              '<span class="num-regiao">' + (jaFeito ? '✓' : '?') + '</span><span>' + escapeHtmlTexto(r.label) + '</span></div>';
+  });
+  html += '</div><div id="resultado-reconhecer-' + labId + '"></div>';
+  el.innerHTML = html;
+  el.querySelectorAll('.regiao-diag').forEach(function (reg) {
+    reg.addEventListener('click', function () {
+      if (ESTADO_DIAG[labId].reconhecer[reg.dataset.regiao]) return;
+      abrirPerguntaRegiao(labId, reg.dataset.regiao, reg);
+    });
+  });
+}
+
+function abrirPerguntaRegiao(labId, regiaoId, elRegiao) {
+  var regiao = DIAGNOSTICO[labId].etapas.reconhecer.regioes.find(function (r) { return r.id === regiaoId; });
+  if (!regiao) return;
+  var cont = document.getElementById('resultado-reconhecer-' + labId);
+  if (!cont) return;
+
+  var html = '<div class="painel-info-diag" style="margin-top:14px;">';
+  html += '<p class="pergunta">O que é esta região: "' + escapeHtmlTexto(regiao.label) + '"?</p>';
+  html += '<div class="opcoes-justif">';
+  regiao.opcoes.forEach(function (op, i) {
+    html += '<button type="button" class="opcao-justif" data-opcao="' + i + '">' + escapeHtmlTexto(op) + '</button>';
+  });
+  html += '</div></div>';
+  cont.innerHTML = html;
+
+  cont.querySelectorAll('.opcao-justif').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var idx = parseInt(btn.dataset.opcao, 10);
+      var escolhido = regiao.opcoes[idx];
+      var acertou = escolhido === regiao.correto;
+      cont.querySelectorAll('.opcao-justif').forEach(function (b) { b.disabled = true; });
+      btn.classList.add(acertou ? 'correta' : 'errada');
+      if (acertou) {
+        elRegiao.classList.add('correta');
+        elRegiao.querySelector('.num-regiao').textContent = '✓';
+        ESTADO_DIAG[labId].reconhecer[regiaoId] = true;
+        salvarProgresso();
+        calcularNotas(labId);
+      } else {
+        var idxCorreto = regiao.opcoes.indexOf(regiao.correto);
+        var btnCorreto = cont.querySelector('.opcao-justif[data-opcao="' + idxCorreto + '"]');
+        if (btnCorreto) btnCorreto.classList.add('correta');
+      }
+      var res = document.createElement('div');
+      res.className = 'resultado-diag ' + (acertou ? 'ok' : 'no');
+      res.innerHTML = acertou
+        ? '✅ <strong>Correto.</strong> "' + escapeHtmlTexto(regiao.label) + '" é ' + escapeHtmlTexto(regiao.correto.toLowerCase()) + '.'
+        : '❌ <strong>Ainda não.</strong> "' + escapeHtmlTexto(regiao.label) + '" é ' + escapeHtmlTexto(regiao.correto.toLowerCase()) + '.';
+      cont.insertBefore(res, cont.firstChild);
+    });
+  });
+}
+
+function renderizarEscolher(labId) {
+  var el = document.getElementById('bloco-escolher-' + labId);
+  if (!el) return;
+  var regioes = DIAGNOSTICO[labId].etapas.escolher.regioes;
+  var html = '<div class="highlight-box purple"><strong>Objetivo:</strong> escolha a tag correta <em>e</em> justifique o motivo.</div>';
+  regioes.forEach(function (reg, i) {
+    html += '<div class="painel-info-diag" data-regiao-escolha="' + reg.id + '" style="margin-bottom:16px;">';
+    html += '<p class="pergunta">Região ' + (i + 1) + ': ' + escapeHtmlTexto(reg.descricao) + '</p>';
+    html += '<div class="opcoes-tag">';
+    reg.tags.forEach(function (tag) {
+      html += '<button type="button" class="opcao-tag" data-tag="' + escapeHtmlTexto(tag) + '"><code>&lt;' + escapeHtmlTexto(tag) + '&gt;</code></button>';
+    });
+    html += '</div>';
+    html += '<div id="justif-' + labId + '-' + reg.id + '" style="display:none;"></div></div>';
+  });
+  el.innerHTML = html;
+
+  regioes.forEach(function (reg) {
+    var container = el.querySelector('[data-regiao-escolha="' + reg.id + '"]');
+    if (!container) return;
+    container.querySelectorAll('.opcao-tag').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var escolhida = btn.dataset.tag;
+        var acertouTag = escolhida === reg.tagCorreta;
+        container.querySelectorAll('.opcao-tag').forEach(function (b) { b.disabled = true; });
+        btn.classList.add(acertouTag ? 'correta' : 'errada');
+        if (!acertouTag) {
+          var btnCerto = container.querySelector('.opcao-tag[data-tag="' + reg.tagCorreta + '"]');
+          if (btnCerto) btnCerto.classList.add('correta');
+        }
+        var justif = document.getElementById('justif-' + labId + '-' + reg.id);
+        if (!justif) return;
+        var htmlJ = '<div style="margin-top:12px;"><p style="font-size:.85rem;font-weight:700;color:#0f172a;margin-bottom:8px;">Agora justifique sua escolha:</p><div class="opcoes-justif">';
+        reg.justificativas.forEach(function (j, idx) {
+          htmlJ += '<button type="button" class="opcao-justif" data-justif="' + idx + '">' + escapeHtmlTexto(j.t) + '</button>';
+        });
+        htmlJ += '</div></div>';
+        justif.innerHTML = htmlJ;
+        justif.style.display = 'block';
+
+        justif.querySelectorAll('.opcao-justif').forEach(function (btnJ) {
+          btnJ.addEventListener('click', function () {
+            var idxJ = parseInt(btnJ.dataset.justif, 10);
+            var acertouJust = reg.justificativas[idxJ].correta;
+            justif.querySelectorAll('.opcao-justif').forEach(function (b) { b.disabled = true; });
+            btnJ.classList.add(acertouJust ? 'correta' : 'errada');
+            var corretaJ = reg.justificativas.find(function (j) { return j.correta; });
+            if (!acertouJust) {
+              var idxCorreto = reg.justificativas.indexOf(corretaJ);
+              var btnCorreto = justif.querySelector('.opcao-justif[data-justif="' + idxCorreto + '"]');
+              if (btnCorreto) btnCorreto.classList.add('correta');
+            }
+            var res = document.createElement('div');
+            res.className = 'resultado-diag ' + (acertouTag && acertouJust ? 'ok' : 'info');
+            var tagSegura = '<code>&lt;' + escapeHtmlTexto(reg.tagCorreta) + '&gt;</code>';
+            if (acertouTag && acertouJust) {
+              res.innerHTML = '✅ <strong>Completo.</strong> Você identificou ' + tagSegura + ' e a razão certa.';
+              ESTADO_DIAG[labId].escolher[reg.id] = true;
+              salvarProgresso();
+              calcularNotas(labId);
+            } else if (acertouTag && !acertouJust) {
+              res.innerHTML = '⚠️ <strong>Tag certa, justificativa errada.</strong> ' + tagSegura + ' é a correta. A razão certa é: ' + escapeHtmlTexto(corretaJ.t);
+            } else {
+              res.innerHTML = '❌ <strong>Tag incorreta.</strong> A certa é ' + tagSegura + '. Razão: ' + escapeHtmlTexto(corretaJ.t);
+            }
+            justif.appendChild(res);
+          });
+        });
+      });
+    });
+  });
+}
+
+function renderizarAninhar(labId) {
+  var el = document.getElementById('bloco-aninhar-' + labId);
+  if (!el) return;
+  var dados = DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta;
+
+  var html = '<div class="highlight-box green"><strong>Objetivo:</strong> cada slot mostra a <em>trilha</em> (caminho de tags a partir da raiz). Selecione uma peça do banco e clique no slot onde ela deve ficar. Slots de filhos só liberam depois que o pai estiver preenchido.</div>';
+  html += '<div class="arvore-construcao"><div class="rotulo-etapa">🌳 Árvore do documento <span class="pista">(a trilha à esquerda mostra a hierarquia do slot)</span></div>';
+  html += renderArvoreSlots(labId, dados);
+  html += '</div>';
+
+  html += '<div class="banco-blocos" data-banco-diag="' + labId + '"><span class="rotulo-banco-bloco">📦 Banco de peças — o número no canto indica quantas cópias restam</span>';
+  coletarTagsInjetaveis(labId).forEach(function (tag) {
+    html += '<button type="button" class="bloco-disponivel" data-bloco-tag="' + escapeHtmlTexto(tag) + '">' +
+              '&lt;' + escapeHtmlTexto(tag) + '&gt;<span class="contador"></span>' +
+            '</button>';
+  });
+  html += '</div>';
+  html += '<div id="resultado-aninhar-' + labId + '"></div>';
+  html += '<div style="margin-top:6px;">' +
+          '<button type="button" class="btn-diag-acao" id="btn-verificar-aninhar-' + labId + '">✔️ Verificar a árvore</button>' +
+          '<button type="button" class="btn-diag-secundario" id="btn-reset-aninhar-' + labId + '">🔄 Recomeçar</button>' +
+          '</div>';
+  el.innerHTML = html;
+
+  el.querySelectorAll('.bloco-disponivel').forEach(function (peca) {
+    peca.addEventListener('click', function () {
+      if (peca.classList.contains('usado')) return;
+      el.querySelectorAll('.bloco-disponivel').forEach(function (p) { p.classList.remove('selecionado'); });
+      peca.classList.add('selecionado');
+      TAG_SELECIONADA[labId] = peca.dataset.blocoTag;
+    });
+  });
+
+  el.querySelectorAll('.nivel-arvore').forEach(function (slot) {
+    slot.addEventListener('click', function (ev) {
+      if (ev.target.closest('.acoes-slot')) return;
+      tratarCliqueSlotArvore(labId, slot);
+    });
+  });
+
+  var btnVerificar = document.getElementById('btn-verificar-aninhar-' + labId);
+  if (btnVerificar) btnVerificar.addEventListener('click', function () { verificarArvore(labId); });
+  var btnReset = document.getElementById('btn-reset-aninhar-' + labId);
+  if (btnReset) btnReset.addEventListener('click', function () { resetArvore(labId); });
+
+  atualizarTodosSlots(labId);
+}
+
+function renderArvoreSlots(labId, dados) {
+  var html = '';
+  function renderNo(no, caminho) {
+    html += slotAninharHTML(labId, caminho, no);
+    if (no.filhos && no.filhos.length) {
+      html += '<div class="nivel-filhos">';
+      no.filhos.forEach(function (f, j) { renderNo(f, caminho + '-filho-' + j); });
+      html += '</div>';
+    }
+  }
+  dados.forEach(function (raiz, i) { renderNo(raiz, 'raiz-' + i); });
+  return html;
+}
+
+function slotAninharHTML(labId, slotId, no) {
+  var trilha = trilhaSlot(DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta, slotId);
+  var valor = ESTADO_DIAG[labId].aninhar.slots[slotId];
+  var paiSlot = prefixoPai(slotId);
+  var paiPreenchido = paiSlot ? !!ESTADO_DIAG[labId].aninhar.slots[paiSlot] : true;
+  var classes = 'nivel-arvore';
+  if (valor) classes += (valor === no.tag ? ' preenchido' : ' preenchido-errado');
+  else if (!paiPreenchido) classes += ' bloqueado';
+  else classes += ' disponivel';
+
+  var trilhaHtml = '<div class="trilha-slot">';
+  trilha.forEach(function (t, idx) {
+    if (idx > 0) trilhaHtml += '<span class="sep">›</span>';
+    trilhaHtml += '&lt;' + escapeHtmlTexto(t) + '&gt;';
+  });
+  trilhaHtml += '</div>';
+
+  var conteudo;
+  if (valor) {
+    conteudo = '<span class="tag-bloco">&lt;' + escapeHtmlTexto(valor) + '&gt;</span>';
+    conteudo += '<div class="acoes-slot"><button type="button" title="Remover peça">✕</button></div>';
+  } else {
+    conteudo = '<span class="tag-bloco">?</span><div class="desc-bloco">' + escapeHtmlTexto(no.descricao) + '</div>';
+    if (!paiPreenchido) conteudo += '<div class="pista-slot">⚠️ Preencha o pai primeiro.</div>';
+  }
+
+  return '<div class="' + classes + '" data-slot-arvore="' + slotId + '" data-tag-correta="' + escapeHtmlTexto(no.tag) + '">' +
+            trilhaHtml + conteudo + '</div>';
+}
+
+function coletarTagsInjetaveis(labId) {
+  var contagem = contarTagsNaArvore(labId);
+  var distratores = { lab1: ['section', 'div'], lab3: ['p', 'dl'], lab4: ['article', 'div'] };
+  var lista = [];
+  Object.keys(contagem).forEach(function (tag) {
+    for (var i = 0; i < contagem[tag]; i++) lista.push(tag);
+  });
+  (distratores[labId] || []).forEach(function (tag) { if (!contagem[tag]) lista.push(tag); });
+  lista.sort();
+  return lista;
+}
+
+function atualizarTodosSlots(labId) {
+  var el = document.getElementById('bloco-aninhar-' + labId);
+  if (!el) return;
+  var dados = DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta;
+  var usos = {};
+  Object.values(ESTADO_DIAG[labId].aninhar.slots).forEach(function (v) { if (v) usos[v] = (usos[v] || 0) + 1; });
+
+  el.querySelectorAll('[data-slot-arvore]').forEach(function (slot) {
+    var slotId = slot.dataset.slotArvore;
+    var no = encontrarNoPorSlot(dados, slotId);
+    var valor = ESTADO_DIAG[labId].aninhar.slots[slotId];
+    var paiSlot = prefixoPai(slotId);
+    var paiPreenchido = paiSlot ? !!ESTADO_DIAG[labId].aninhar.slots[paiSlot] : true;
+
+    slot.classList.remove('disponivel', 'bloqueado', 'preenchido', 'preenchido-errado');
+    if (valor) slot.classList.add(no && no.tag === valor ? 'preenchido' : 'preenchido-errado');
+    else if (!paiPreenchido) slot.classList.add('bloqueado');
+    else slot.classList.add('disponivel');
+
+    var trilha = trilhaSlot(dados, slotId);
+    var trilhaHtml = '<div class="trilha-slot">';
+    trilha.forEach(function (t, idx) {
+      if (idx > 0) trilhaHtml += '<span class="sep">›</span>';
+      trilhaHtml += '&lt;' + escapeHtmlTexto(t) + '&gt;';
+    });
+    trilhaHtml += '</div>';
+
+    var corpo = '';
+    if (valor) {
+      corpo = '<span class="tag-bloco">&lt;' + escapeHtmlTexto(valor) + '&gt;</span>';
+      if (no && no.tag === valor) corpo += '<div class="desc-bloco">' + escapeHtmlTexto(no.descricao) + '</div>';
+      else if (no) corpo += '<div class="desc-bloco">✕ esperado: &lt;' + escapeHtmlTexto(no.tag) + '&gt; — ' + escapeHtmlTexto(no.descricao) + '</div>';
+      corpo += '<div class="acoes-slot"><button type="button" data-remover-slot="' + slotId + '" title="Remover peça">✕</button></div>';
+    } else {
+      corpo = '<span class="tag-bloco">?</span><div class="desc-bloco">' + escapeHtmlTexto(no ? no.descricao : '') + '</div>';
+      if (!paiPreenchido) corpo += '<div class="pista-slot">⚠️ Preencha o pai primeiro.</div>';
+    }
+    slot.innerHTML = trilhaHtml + corpo;
+  });
+
+  el.querySelectorAll('.acoes-slot button').forEach(function (btn) {
+    btn.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      ESTADO_DIAG[labId].aninhar.slots[btn.dataset.removerSlot] = null;
+      salvarProgresso();
+      atualizarTodosSlots(labId);
+    });
+  });
+
+  var contagem = contarTagsNaArvore(labId);
+  el.querySelectorAll('.bloco-disponivel').forEach(function (peca) {
+    var tag = peca.dataset.blocoTag;
+    var total = contagem[tag] || 0;
+    var restantes = total > 0 ? Math.max(0, total - (usos[tag] || 0)) : 1 - Math.min(1, usos[tag] || 0);
+    var contadorEl = peca.querySelector('.contador');
+    if (contadorEl && total > 0) contadorEl.textContent = restantes + 'x';
+    peca.classList.toggle('usado', restantes <= 0);
+  });
+
+  calcularNotas(labId);
+}
+
+function tratarCliqueSlotArvore(labId, slot) {
+  var slotId = slot.dataset.slotArvore;
+  if (ESTADO_DIAG[labId].aninhar.slots[slotId]) {
+    ESTADO_DIAG[labId].aninhar.slots[slotId] = null;
+    salvarProgresso();
+    atualizarTodosSlots(labId);
+    return;
+  }
+  var paiSlot = prefixoPai(slotId);
+  if (paiSlot && !ESTADO_DIAG[labId].aninhar.slots[paiSlot]) {
+    mostrarToast('⚠️ Preencha o elemento pai antes deste slot.');
+    return;
+  }
+  var selecionada = TAG_SELECIONADA[labId];
+  if (!selecionada) {
+    mostrarToast('⚠️ Selecione uma peça do banco primeiro.');
+    return;
+  }
+  var totalDaTag = contarTagsNaArvore(labId)[selecionada] || 0;
+  var usosDaTag = Object.values(ESTADO_DIAG[labId].aninhar.slots).filter(function (v) { return v === selecionada; }).length;
+  if (totalDaTag > 0 && usosDaTag >= totalDaTag) {
+    mostrarToast('⚠️ Todas as peças <' + selecionada + '> já estão em uso.');
+    return;
+  }
+  ESTADO_DIAG[labId].aninhar.slots[slotId] = selecionada;
+  TAG_SELECIONADA[labId] = null;
+  salvarProgresso();
+  atualizarTodosSlots(labId);
+}
+
+function verificarArvore(labId) {
+  var el = document.getElementById('resultado-aninhar-' + labId);
+  if (!el) return;
+  var dados = DIAGNOSTICO[labId].etapas.arvore.arvoreCorreta;
+  var exps = DIAGNOSTICO[labId].etapas.arvore.explicacoesErro || {};
+  var slotsTotal = Object.keys(ESTADO_DIAG[labId].aninhar.slots).length;
+  var faltando = 0;
+  var erros = [];
+
+  Object.keys(ESTADO_DIAG[labId].aninhar.slots).forEach(function (slotId) {
+    var valor = ESTADO_DIAG[labId].aninhar.slots[slotId];
+    if (!valor) { faltando++; return; }
+    var no = encontrarNoPorSlot(dados, slotId);
+    if (no && valor !== no.tag) erros.push({ slotId: slotId, valor: valor, correta: no.tag });
+  });
+
+  if (faltando > 0) {
+    el.innerHTML = '<div class="resultado-diag info">⏳ Ainda faltam <strong>' + faltando + '</strong> de ' + slotsTotal + ' slot(s) em branco.</div>';
+    return;
+  }
+  if (erros.length === 0) {
+    el.innerHTML = '<div class="resultado-diag ok">✅ <strong>Árvore perfeita!</strong> Cada elemento está no lugar certo. Essa é a hierarquia que o navegador percorre para renderizar.</div>';
+    return;
+  }
+
+  var html = '<div class="resultado-diag no"><strong>' + erros.length + ' slot(s) fora do lugar.</strong><ul>';
+  erros.forEach(function (e) {
+    var motivo = exps[e.valor + '-' + e.correta];
+    if (!motivo) {
+      var trilhaTxt = trilhaSlot(dados, e.slotId).map(function (t) { return '&lt;' + escapeHtmlTexto(t) + '&gt;'; }).join(' › ');
+      motivo = 'Neste slot (trilha <code>' + trilhaTxt + '</code>), o correto é <code>&lt;' + escapeHtmlTexto(e.correta) + '&gt;</code>, e você colocou <code>&lt;' + escapeHtmlTexto(e.valor) + '&gt;</code>.';
+    } else {
+      motivo = motivo.replace(/<(?!\/?(code|strong|em|br)\b)([^>]+)>/g, '&lt;$2&gt;');
+    }
+    html += '<li>' + motivo + '</li>';
+  });
+  html += '</ul><p style="margin-top:10px;font-style:italic;">Clique em ✕ no slot para devolver a peça.</p></div>';
+  el.innerHTML = html;
+}
+
+function resetArvore(labId) {
+  var el = document.getElementById('bloco-aninhar-' + labId);
+  if (!el) return;
+  el.querySelectorAll('[data-slot-arvore]').forEach(function (slot) {
+    ESTADO_DIAG[labId].aninhar.slots[slot.dataset.slotArvore] = null;
+  });
+  TAG_SELECIONADA[labId] = null;
+  salvarProgresso();
+  atualizarTodosSlots(labId);
+  var res = document.getElementById('resultado-aninhar-' + labId);
+  if (res) res.innerHTML = '';
+}
+
+function renderizarJulgar(labId) {
+  var el = document.getElementById('bloco-julgar-' + labId);
+  if (!el) return;
+  var dados = DIAGNOSTICO[labId].etapas.julgar;
+  var escolhido = ESTADO_DIAG[labId].julgar.escolhido;
+
+  var html = '<div class="highlight-box orange"><strong>Objetivo:</strong> compare as três implementações como em um code review. Identifique a única versão que cumpre rigorosamente as normas semânticas do HTML5 e de acessibilidade.</div>';
+  html += '<p style="font-weight:700;color:#0f172a;margin-bottom:12px;font-size:.95rem;">' + escapeHtmlTexto(dados.pergunta) + '</p>';
+  html += '<div class="grid-julgar">';
+  dados.versoes.forEach(function (v) {
+    var cardClasses = 'versao-card';
+    if (escolhido) {
+      if (v.id === escolhido) cardClasses += ' selecionada';
+      cardClasses += (v.correta ? ' correta' : ' errada');
+    }
+    html += '<div class="' + cardClasses + '" data-versao-card="' + v.id + '">' +
+              '<div class="versao-card-topo">' +
+                '<span class="versao-badge">' + escapeHtmlTexto(v.titulo) + '</span>' +
+                '<button type="button" class="btn-escolher-versao" data-escolher-versao="' + v.id + '">' +
+                  (escolhido && v.id === escolhido ? '✓ Selecionada' : 'Escolher esta versão') +
+                '</button>' +
+              '</div>' +
+              '<div class="codigo-versao-box">' + escapeHtmlTexto(v.codigo) + '</div>' +
+              '<div class="diagnostico-versao' + (escolhido ? ' mostrar ' + (v.correta ? 'ok' : 'no') : '') + '">' +
+                (escolhido ? (v.correta ? '✅ <strong>Válida:</strong> ' : '❌ <strong>Problema identificado:</strong> ') + escapeHtmlTexto(v.motivo) : '') +
+              '</div>' +
+            '</div>';
+  });
+  html += '</div>';
+  html += '<div id="resultado-julgar-' + labId + '"></div>';
+  el.innerHTML = html;
+
+  el.querySelectorAll('[data-escolher-versao]').forEach(function (btn) {
+    btn.addEventListener('click', function () { selecionarVersao(labId, btn.dataset.escolherVersao); });
+  });
+}
+
+function selecionarVersao(labId, versaoId) {
+  var container = document.getElementById('bloco-julgar-' + labId);
+  if (!container) return;
+  var dados = DIAGNOSTICO[labId].etapas.julgar.versoes;
+  var escolhida = dados.find(function (v) { return v.id === versaoId; });
+  if (!escolhida) return;
+
+  container.querySelectorAll('.versao-card').forEach(function (card) {
+    card.classList.remove('selecionada', 'correta', 'errada');
+    card.querySelector('.btn-escolher-versao').textContent = 'Escolher esta versão';
+    var diag = card.querySelector('.diagnostico-versao');
+    diag.classList.remove('mostrar', 'ok', 'no');
+    diag.innerHTML = '';
+  });
+
+  var cardAlvo = container.querySelector('[data-versao-card="' + versaoId + '"]');
+  if (cardAlvo) {
+    cardAlvo.classList.add('selecionada');
+    cardAlvo.classList.add(escolhida.correta ? 'correta' : 'errada');
+    cardAlvo.querySelector('.btn-escolher-versao').textContent = '✓ Selecionada';
+    var diag = cardAlvo.querySelector('.diagnostico-versao');
+    diag.classList.add('mostrar', escolhida.correta ? 'ok' : 'no');
+    diag.innerHTML = (escolhida.correta ? '✅ <strong>Válida:</strong> ' : '❌ <strong>Problema identificado:</strong> ') + escapeHtmlTexto(escolhida.motivo);
+  }
+
+  var res = document.getElementById('resultado-julgar-' + labId);
+  if (res) {
+    var html = '<div class="resultado-diag ' + (escolhida.correta ? 'ok' : 'no') + '">';
+    html += escolhida.correta ? '✅ <strong>Resposta correta.</strong> ' : '❌ <strong>Essa versão não é a válida.</strong> ';
+    html += 'Compare o painel de diagnóstico de cada card para fixar o critério de julgamento.';
+    html += '</div>';
+    res.innerHTML = html;
+  }
+
+  if (escolhida.correta) {
+    ESTADO_DIAG[labId].julgar.escolhido = versaoId;
+    salvarProgresso();
+    calcularNotas(labId);
+  }
+}
+
+var EXPLICACOES_ARVORE = {
+  html: { titulo: '&lt;html&gt; — a raiz', texto: 'Envolve todo o documento. <code>lang="pt-BR"</code> indica o idioma.' },
+  head: { titulo: '&lt;head&gt; — a ficha técnica', texto: 'Invisível ao usuário. Guarda metadados: <code>&lt;meta charset&gt;</code>, <code>&lt;meta viewport&gt;</code>, <code>&lt;title&gt;</code>.' },
+  meta: { titulo: '&lt;meta&gt; e &lt;title&gt;', texto: 'O <code>&lt;meta&gt;</code> é void element: não tem fechamento. O <code>&lt;title&gt;</code> aparece na aba.' },
+  body: { titulo: '&lt;body&gt; — o palco', texto: 'Tudo o que o usuário vê: títulos, parágrafos, imagens, links, formulários.' },
+  conteudo: { titulo: 'Elementos visíveis', texto: 'As tags de conteúdo, como h1, p e img, compõem a página renderizada dentro do body.' }
+};
+
+function destacarNoArvore(no) {
+  document.querySelectorAll('.no-arvore').forEach(function (b) { b.classList.remove('ativo'); });
+  var bloco = document.querySelector('.no-arvore[data-no="' + no + '"]');
+  if (bloco) bloco.classList.add('ativo');
+  var info = EXPLICACOES_ARVORE[no];
+  if (!info) return;
+  var caixa = document.getElementById('explicacaoArvore');
+  if (!caixa) return;
+  caixa.innerHTML = '<h5>' + info.titulo + '</h5><p>' + info.texto + '</p>';
+}
+
+var DETALHES_SEMANTICA = {
+  header: { titulo: '&lt;header&gt;', desc: 'Cabeçalho introdutório de uma página ou seção.', codigo: '<header>\n  <h1>Meu Portal</h1>\n</header>' },
+  nav: { titulo: '&lt;nav&gt;', desc: 'Área de links de navegação principal.', codigo: '<nav>\n  <a href="#artigo">Artigo</a>\n</nav>' },
+  main: { titulo: '&lt;main&gt;', desc: 'Conteúdo dominante da página. Só um por documento.', codigo: '<main>\n  <h2>Conteúdo</h2>\n</main>' },
+  section: { titulo: '&lt;section&gt;', desc: 'Seção temática genérica, com seu próprio cabeçalho.', codigo: '<section>\n  <h3>Notícias</h3>\n</section>' },
+  article: { titulo: '&lt;article&gt;', desc: 'Composição autônoma, distribuível fora da página.', codigo: '<article>\n  <h3>Post</h3>\n</article>' },
+  aside: { titulo: '&lt;aside&gt;', desc: 'Conteúdo periférico ou secundário.', codigo: '<aside>\n  <h4>Links</h4>\n</aside>' },
+  figure: { titulo: '&lt;figure&gt; e &lt;figcaption&gt;', desc: 'Ilustração com legenda semântica associada.', codigo: '<figure>\n  <img src="foto.jpg" alt="Foto">\n  <figcaption>Legenda</figcaption>\n</figure>' },
+  footer: { titulo: '&lt;footer&gt;', desc: 'Rodapé da página ou seção.', codigo: '<footer>\n  <p>&copy; 2026</p>\n</footer>' }
+};
+
+function destacarSemantica(tag, el) {
+  document.querySelectorAll('.bloco-semantico').forEach(function (b) { b.classList.remove('ativo'); });
+  el.classList.add('ativo');
+  var info = DETALHES_SEMANTICA[tag];
+  if (!info) return;
+  var nome = document.getElementById('sem-tag-nome');
+  var desc = document.getElementById('sem-tag-desc');
+  var cod = document.getElementById('sem-tag-codigo');
+  if (nome) nome.textContent = info.titulo.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  if (desc) desc.textContent = info.desc;
+  if (cod) cod.textContent = info.codigo;
+}
+
+function trocarAba(idAba, botao) {
+  document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function (c) { c.classList.remove('active'); });
+  botao.classList.add('active');
+  var alvo = document.getElementById(idAba);
+  if (alvo) alvo.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function trocarAbaLab(labId, pane, botao) {
+  var wrap = document.getElementById('card-' + labId);
+  if (!wrap) return;
+  wrap.querySelectorAll('.code-aba-btn').forEach(function (b) { b.classList.remove('active'); });
+  wrap.querySelectorAll('.code-pane').forEach(function (p) { p.classList.remove('active'); });
+  botao.classList.add('active');
+  var alvo = document.getElementById(labId + '-pane-' + pane);
+  if (alvo) alvo.classList.add('active');
+}
+
+function copiarTextoFallback(texto) {
+  var area = document.createElement('textarea');
+  area.value = texto;
+  area.setAttribute('readonly', '');
+  area.style.position = 'fixed';
+  area.style.top = '-1000px';
+  document.body.appendChild(area);
+  area.select();
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(area);
+  return ok;
+}
+
+function copiarTexto(texto, botao) {
+  if (!texto) return;
+  var finalizar = function (sucesso) {
+    if (sucesso) {
+      mostrarToast('✅ Copiado!');
+      if (botao) {
+        var orig = botao.textContent;
+        botao.textContent = '✅ Copiado!';
+        setTimeout(function () { botao.textContent = orig; }, 1800);
+      }
+    } else mostrarToast('⚠️ Não foi possível copiar.');
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(texto).then(function () { finalizar(true); }).catch(function () { finalizar(copiarTextoFallback(texto)); });
+  } else finalizar(copiarTextoFallback(texto));
+}
+
+function copiarCodigoLab(labId, botao) {
+  var wrap = document.getElementById('card-' + labId);
+  if (!wrap) return;
+  var pane = wrap.querySelector('.code-pane.active pre');
+  if (!pane) return;
+  copiarTexto(pane.textContent, botao);
+}
+
+function baixarLab(labId) {
+  var lab = CODIGOS_LABS[labId];
+  if (!lab) return;
+  var html = montarArquivoUnico(lab);
+  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = labId + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 30000);
+  mostrarToast('✅ Arquivo baixado.');
+}
+
+function abrirPreviewInline(labId) {
+  var lab = CODIGOS_LABS[labId];
+  if (!lab) return;
+  var wrapper = document.getElementById('card-' + labId);
+  if (!wrapper) return;
+  var anterior = wrapper.parentNode.querySelector('.preview-inline[data-lab="' + labId + '"]');
+  if (anterior) anterior.remove();
+  var caixa = document.createElement('div');
+  caixa.className = 'preview-inline'; caixa.dataset.lab = labId;
+  var header = document.createElement('div');
+  header.className = 'preview-header';
+  header.innerHTML = '<span>🧪 Preview — ' + labId + '.html</span>';
+  var botaoFechar = document.createElement('button');
+  botaoFechar.type = 'button'; botaoFechar.className = 'preview-close'; botaoFechar.textContent = '✕ Fechar';
+  header.appendChild(botaoFechar);
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+  iframe.setAttribute('title', 'Preview ' + labId);
+  iframe.srcdoc = montarArquivoUnico(lab);
+  caixa.appendChild(header); caixa.appendChild(iframe);
+  wrapper.parentNode.insertBefore(caixa, wrapper.nextSibling);
+  botaoFechar.addEventListener('click', function () { caixa.remove(); });
+  caixa.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function executarOneCompilerLab(labId) {
+  var lab = CODIGOS_LABS[labId];
+  if (!lab) return;
+  var url = 'https://onecompiler.com/html?code=' + encodeURIComponent(montarArquivoUnico(lab));
+  var win = window.open(url, '_blank');
+  if (!win) mostrarToast('⚠️ Permita pop-ups para abrir o OneCompiler.');
+}
+
+var toastTimer = null;
+function mostrarToast(msg) {
+  var t = document.getElementById('toastNotificacao');
+  if (!t) return;
+  t.textContent = msg; t.style.display = 'block';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.style.display = 'none'; }, 3000);
+}
+
+var BANCO_AVALIACAO = [
+  { id: 'q1', pergunta: '1 — O que significa a sigla "HTML"?', opcoes: [ { l: 'a', t: 'Hyper Text Markup Language' }, { l: 'b', t: 'High Technology Modern Language' }, { l: 'c', t: 'Hyper Transfer and Text Language' }, { l: 'd', t: 'Human Text and Multimedia Language' } ], correta: 'a', explicacao: 'HTML significa HyperText Markup Language.' },
+  { id: 'q2', pergunta: '2 — O HTML é uma linguagem de programação?', opcoes: [ { l: 'a', t: 'Sim, permite loops.' }, { l: 'b', t: 'Não, é uma linguagem de marcação.' }, { l: 'c', t: 'Sim, mas só no navegador.' }, { l: 'd', t: 'Depende da versão.' } ], correta: 'b', explicacao: 'HTML marca e estrutura conteúdo.' },
+  { id: 'q3', pergunta: '3 — Qual tag HTML cria um link?', opcoes: [ { l: 'a', t: '<link>' }, { l: 'b', t: '<a>' }, { l: 'c', t: '<url>' }, { l: 'd', t: '<hyperlink>' } ], correta: 'b', explicacao: '<a> com href é o hiperlink.' },
+  { id: 'q4', pergunta: '4 — Qual tag cria lista numerada?', opcoes: [ { l: 'a', t: '<ul>' }, { l: 'b', t: '<li>' }, { l: 'c', t: '<ol>' }, { l: 'd', t: '<dl>' } ], correta: 'c', explicacao: '<ol> = Ordered List.' },
+  { id: 'q5', pergunta: '5 — Agrupar "Sobre Nós", "Preços", "Depoimentos". Qual tag?', opcoes: [ { l: 'a', t: '<section>' }, { l: 'b', t: '<article>' }, { l: 'c', t: '<aside>' }, { l: 'd', t: '<footer>' } ], correta: 'a', explicacao: '<section> agrupa conteúdo temático.' },
+  { id: 'q6', pergunta: '6 — Post de blog que pode ser compartilhado em feed. Qual tag?', opcoes: [ { l: 'a', t: '<section>' }, { l: 'b', t: '<article>' }, { l: 'c', t: '<div class="post">' }, { l: 'd', t: '<span>' } ], correta: 'b', explicacao: '<article> = conteúdo autônomo.' },
+  { id: 'q7', pergunta: '7 — Por que tags semânticas <div> genérica?', opcoes: [ { l: 'a', t: 'Dispensam CSS.' }, { l: 'b', t: 'Comunicam significado a leitores de tela e melhoram SEO.' }, { l: 'c', t: 'Arquivo menor.' }, { l: 'd', t: 'Impedem JS.' } ], correta: 'b', explicacao: 'Semântica ajuda acessibilidade e SEO.' },
+  { id: 'q8', pergunta: '8 — Extensão típica de documento HTML?', opcoes: [ { l: 'a', t: '.htm' }, { l: 'b', t: '.txt' }, { l: 'c', t: '.html' }, { l: 'd', t: '.xml' } ], correta: 'c', explicacao: 'Padrão moderno é .html.' },
+  { id: 'q9', pergunta: '9 — Link externo com target="_blank". Que atributo de segurança?', opcoes: [ { l: 'a', t: 'rel="noopener noreferrer"' }, { l: 'b', t: 'type="password"' }, { l: 'c', t: 'security="max"' }, { l: 'd', t: 'method="POST"' } ], correta: 'a', explicacao: 'rel="noopener noreferrer" evita tabnabbing.' },
+  { id: 'q10', pergunta: '10 — Qual destas é void element?', opcoes: [ { l: 'a', t: '<p>' }, { l: 'b', t: '<article>' }, { l: 'c', t: '<input>' }, { l: 'd', t: '<section>' } ], correta: 'c', explicacao: '<input> é void.' },
+  { id: 'q11', pergunta: '11 — Em <p>Olá, <strong>mundo</strong>!</p>. O que o navegador faz com "mundo"?', opcoes: [ { l: 'a', t: 'Negrito.' }, { l: 'b', t: 'Risca.' }, { l: 'c', t: 'Bloco separado.' }, { l: 'd', t: 'Ignora.' } ], correta: 'a', explicacao: '<strong> renderiza em negrito.' },
+  { id: 'q12', pergunta: '12 — Qual href navega para uma seção da mesma página?', opcoes: [ { l: 'a', t: 'href="https://exemplo.com"' }, { l: 'b', t: 'href="#minha-secao"' }, { l: 'c', t: 'name="minha-secao"' }, { l: 'd', t: 'target="_blank"' } ], correta: 'b', explicacao: '#navega para id correspondente.' },
+  { id: 'q13', pergunta: '13 — Manter quebras de linha de poema sem <br>. Solução?', opcoes: [ { l: 'a', t: '<p>' }, { l: 'b', t: '<pre>' }, { l: 'c', t: '<h1>' }, { l: 'd', t: '<link>' } ], correta: 'b', explicacao: '<pre> preserva quebras.' },
+  { id: 'q14', pergunta: '14 — Em <a href="pagina.html" terget="_blank">Abrir</a>. Qual o problema?', opcoes: [ { l: 'a', t: 'href errado.' }, { l: 'b', t: '"terget" digitado errado — correto é "target".' }, { l: 'c', t: '<a> não aceita atributos.' }, { l: 'd', t: 'href deveria ter http://.' } ], correta: 'b', explicacao: 'Atributos desconhecidos são ignorados.' },
+  { id: 'q15', pergunta: '15 — Foto de equipe com legenda. Estrutura correta?', opcoes: [ { l: 'a', t: '<img src="foto.jpg" alt="Equipe">' }, { l: 'b', t: '<figure><img src="foto.jpg" alt="Equipe"><figcaption>Equipe 2026</figcaption></figure>' }, { l: 'c', t: '<img><span>Equipe 2026</span>' }, { l: 'd', t: '<caption><img src="foto.jpg"></caption>' } ], correta: 'b', explicacao: '<figure> + <figcaption>.' }
+];
+
+var respostasAluno = {};
+var questoesFinalizadas = {};
+
+function inicializarQuestoes() {
+  var container = document.getElementById('containerQuestoes');
+  if (!container) return;
+  container.innerHTML = '';
+  BANCO_AVALIACAO.forEach(function (q, idx) {
+    var div = document.createElement('div');
+    div.className = 'question'; div.id = q.id;
+    var header = document.createElement('div');
+    header.className = 'question-header';
+    header.innerHTML = '<span class="question-number">' + (idx + 1) + '</span><div>' + escapeHtmlTexto(q.pergunta) + '</div>';
+    div.appendChild(header);
+    var options = document.createElement('div');
+    options.className = 'options';
+    q.opcoes.forEach(function (op) {
+      var opt = document.createElement('div');
+      opt.className = 'option'; opt.dataset.letra = op.l;
+      var radio = document.createElement('input');
+      radio.type = 'radio'; radio.name = q.id; radio.value = op.l; radio.tabIndex = -1;
+      var label = document.createElement('label');
+      label.innerHTML = '<strong>' + op.l + ')</strong> ' + escapeHtmlTexto(op.t);
+      opt.appendChild(radio); opt.appendChild(label);
+      opt.addEventListener('click', function (ev) { ev.preventDefault(); marcarOpcao(q.id, op.l, opt); });
+      options.appendChild(opt);
+    });
+    div.appendChild(options);
+    var feed = document.createElement('div');
+    feed.className = 'feedback-imediato'; feed.id = 'feed-' + q.id;
+    div.appendChild(feed);
+    container.appendChild(div);
+  });
+}
+
+function marcarOpcao(qId, letra, el) {
+  if (questoesFinalizadas[qId]) return;
+  var questao = BANCO_AVALIACAO.find(function (q) { return q.id === qId; });
+  if (!questao) return;
+  var pai = document.getElementById(qId);
+  if (!pai) return;
+  var eraBranco = !respostasAluno[qId];
+  respostasAluno[qId] = letra;
+  questoesFinalizadas[qId] = true;
+  pai.querySelectorAll('.option').forEach(function (o) {
+    o.classList.add('disabled');
+    var rad = o.querySelector('input');
+    if (rad) rad.checked = false;
+  });
+  var feed = document.getElementById('feed-' + qId);
+  if (feed) {
+    feed.classList.add('mostrar');
+    if (letra === questao.correta) {
+      feed.classList.add('ok');
+      feed.innerHTML = '✅ <strong>Correto!</strong> ' + escapeHtmlTexto(questao.explicacao);
+      pai.classList.add('correta-q'); el.classList.add('correct');
+    } else {
+      feed.classList.add('no');
+      feed.innerHTML = '❌ <strong>Ainda não.</strong> ' + escapeHtmlTexto(questao.explicacao);
+      pai.classList.add('errada-q'); el.classList.add('wrong');
+    }
+    var corretaEl = pai.querySelector('.option[data-letra="' + questao.correta + '"]');
+    if (corretaEl) corretaEl.classList.add('correct');
+  }
+  if (eraBranco) atualizarProgressoQuiz();
+}
+
+function atualizarProgressoQuiz() {
+  var total = BANCO_AVALIACAO.length;
+  var respondidas = Object.keys(respostasAluno).length;
+  var pct = Math.round((respondidas / total) * 100);
+  var txt = document.getElementById('txtProgresso');
+  var fill = document.getElementById('fillProgresso');
+  if (txt) txt.textContent = respondidas + ' de ' + total;
+  if (fill) fill.style.width = pct + '%';
+  var btnCorrigir = document.getElementById('btnCorrigir');
+  if (btnCorrigir) btnCorrigir.disabled = respondidas < total;
+}
+
+function corrigirQuiz() {
+  var acertos = 0;
+  var total = BANCO_AVALIACAO.length;
+  var feedbackHtml = '';
+  var linhasResumo = [];
+  var temas = { estrutura: [0, 0], semantica: [0, 0], links: [0, 0] };
+  var mapaTema = { q1: 'estrutura', q2: 'estrutura', q3: 'links', q4: 'estrutura', q5: 'semantica', q6: 'semantica', q7: 'semantica', q8: 'estrutura', q9: 'links', q10: 'estrutura', q11: 'estrutura', q12: 'links', q13: 'estrutura', q14: 'links', q15: 'semantica' };
+  var nome = (document.getElementById('alunoNome').value || '').trim() || 'Estudante Não Identificado';
+  var turma = (document.getElementById('alunoTurma').value || '').trim() || 'Turma Geral';
+  var dataHora = new Date().toLocaleString('pt-BR');
+
+  BANCO_AVALIACAO.forEach(function (q, idx) {
+    var num = idx + 1;
+    var resp = respostasAluno[q.id];
+    var tema = mapaTema[q.id] || 'estrutura';
+    temas[tema][1]++;
+    if (resp === q.correta) {
+      acertos++; temas[tema][0]++;
+      feedbackHtml += '<div style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.9rem;color:#15803d;">✅ <strong>Q' + num + ':</strong> Correta!<div style="color:#64748b;font-style:italic;margin-left:18px;margin-top:2px;">' + escapeHtmlTexto(q.explicacao) + '</div></div>';
+      linhasResumo.push('Q' + num + ': [OK] Alternativa (' + resp + ')');
+    } else {
+      feedbackHtml += '<div style="padding:10px 0;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.9rem;color:#b91c1c;">❌ <strong>Q' + num + ':</strong> Incorreta (Marcou: ' + (resp || 'Em branco') + ' | Gabarito: ' + q.correta + ').<div style="color:#64748b;font-style:italic;margin-left:18px;margin-top:2px;">' + escapeHtmlTexto(q.explicacao) + '</div></div>';
+      linhasResumo.push('Q' + num + ': [ERRO] Marcou (' + (resp || '-') + ') (Gabarito: ' + q.correta + ')');
+    }
+  });
+
+  var percentual = Math.round((acertos / total) * 100);
+  var diag = 'Recomenda-se revisar os conceitos estruturais e de semântica do HTML5.';
+  if (percentual >= 85) diag = '🏆 Excelente! Domínio pleno.';
+  else if (percentual >= 65) diag = '👏 Bom rendimento!';
+
+  document.getElementById('pontuacaoNota').textContent = acertos + ' / ' + total;
+  document.getElementById('msgDiagnostico').textContent = 'Aproveitamento: ' + percentual + '% (' + diag + ')';
+  document.getElementById('listaFeedback').innerHTML = feedbackHtml;
+
+  var linhasTema = [
+    'Estrutura e tags: ' + temas.estrutura[0] + '/' + temas.estrutura[1],
+    'Semântica HTML5: ' + temas.semantica[0] + '/' + temas.semantica[1],
+    'Links e protocolos: ' + temas.links[0] + '/' + temas.links[1]
+  ];
+
+  var textoRelatorio =
+    '====================================================\n' +
+    'RELATÓRIO OFICIAL: TEMA 03 - INTRODUÇÃO AO HTML\n' +
+    'Estudante: ' + nome + '\n' +
+    'Turma: ' + turma + '\n' +
+    'Data/Hora: ' + dataHora + '\n' +
+    'Nota: ' + acertos + ' de ' + total + ' (' + percentual + '%) - ' + diag + '\n' +
+    '----------------------------------------------------\n' +
+    'DESEMPENHO POR TEMA:\n' + linhasTema.join('\n') + '\n' +
+    '----------------------------------------------------\n' +
+    'DETALHAMENTO:\n' + linhasResumo.join('\n') + '\n' +
+    '====================================================';
+
+  document.getElementById('txtCopiaRelatorio').value = textoRelatorio;
+  var res = document.getElementById('caixaResultado');
+  res.style.display = 'block';
+  document.getElementById('btnCopiarRel').disabled = false;
+  document.getElementById('btnImprimir').disabled = false;
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function limparRespostas() {
+  if (!confirm('Deseja limpar todas as respostas?')) return;
+  Object.keys(respostasAluno).forEach(function (k) { delete respostasAluno[k]; });
+  Object.keys(questoesFinalizadas).forEach(function (k) { delete questoesFinalizadas[k]; });
+  document.querySelectorAll('.question').forEach(function (q) {
+    q.classList.remove('correta-q', 'errada-q');
+    q.querySelectorAll('.option').forEach(function (opt) {
+      opt.classList.remove('selecionada', 'correct', 'wrong', 'disabled');
+      var rad = opt.querySelector('input');
+      if (rad) rad.checked = false;
+    });
+    var feed = q.querySelector('.feedback-imediato');
+    if (feed) { feed.classList.remove('mostrar', 'ok', 'no'); feed.innerHTML = ''; }
+  });
+  var res = document.getElementById('caixaResultado');
+  if (res) res.style.display = 'none';
+  var txtRel = document.getElementById('txtCopiaRelatorio');
+  if (txtRel) txtRel.value = '';
+  document.getElementById('btnCopiarRel').disabled = true;
+  document.getElementById('btnImprimir').disabled = true;
+  atualizarProgressoQuiz();
+}
+
+function copiarRelatorio(botao) {
+  var t = document.getElementById('txtCopiaRelatorio');
+  if (!t || !t.value) return;
+  copiarTexto(t.value, botao);
+}
+
+function imprimirRelatorioPDF() {
+  var btnImprimir = document.getElementById('btnImprimir');
+  if (btnImprimir && btnImprimir.disabled) { mostrarToast('⚠️ Finalize primeiro.'); return; }
+  document.getElementById('printNome').textContent = (document.getElementById('alunoNome').value || '').trim() || 'Estudante Não Identificado';
+  document.getElementById('printTurma').textContent = (document.getElementById('alunoTurma').value || '').trim() || 'Turma Geral';
+  document.getElementById('printData').textContent = new Date().toLocaleString('pt-BR');
+  document.getElementById('printScore').textContent = document.getElementById('pontuacaoNota').textContent;
+  var printCont = document.getElementById('printQuestoesContainer');
+  printCont.innerHTML = '';
+  BANCO_AVALIACAO.forEach(function (q, idx) {
+    var resp = respostasAluno[q.id] || 'Em branco';
+    var div = document.createElement('div');
+    div.className = 'print-q';
+    div.innerHTML = '<h4>Q' + (idx + 1) + ': ' + escapeHtmlTexto(q.pergunta) + '</h4>' +
+      '<div class="resp"><strong>Sua Resposta:</strong> (' + resp + ') &bull; <strong>Gabarito:</strong> (' + q.correta + ') &bull; <em>' + escapeHtmlTexto(q.explicacao) + '</em></div>';
+    printCont.appendChild(div);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(function () { window.print(); }); });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  ['lab1', 'lab2', 'lab3', 'lab4', 'lab5'].forEach(function (labId) {
+    var lab = CODIGOS_LABS[labId];
+    if (!lab) return;
+    var paneHtml = document.getElementById(labId + '-pane-html');
+    var paneCss = document.getElementById(labId + '-pane-css');
+    var paneJs = document.getElementById(labId + '-pane-js');
+    var paneTudo = document.getElementById(labId + '-pane-tudo');
+    if (paneHtml) paneHtml.querySelector('pre').textContent = lab.html;
+    if (paneCss) paneCss.querySelector('pre').textContent = lab.css;
+    if (paneJs) paneJs.querySelector('pre').textContent = lab.js;
+    if (paneTudo) paneTudo.querySelector('pre').textContent = montarArquivoUnico(lab);
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { trocarAba(btn.dataset.aba, btn); });
+  });
+  document.querySelectorAll('.code-aba-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { trocarAbaLab(btn.dataset.lab, btn.dataset.pane, btn); });
+  });
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { copiarCodigoLab(btn.dataset.copiar, btn); });
+  });
+  document.querySelectorAll('.run-oc-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { executarOneCompilerLab(btn.dataset.onecompiler); });
+  });
+  document.querySelectorAll('.run-inline-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { abrirPreviewInline(btn.dataset.previewInline); });
+  });
+  document.querySelectorAll('.download-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { baixarLab(btn.dataset.download); });
+  });
+  document.querySelectorAll('.no-arvore').forEach(function (no) {
+    no.addEventListener('click', function (ev) { ev.stopPropagation(); destacarNoArvore(no.dataset.no); });
+  });
+  document.querySelectorAll('.bloco-semantico').forEach(function (b) {
+    b.addEventListener('click', function () { destacarSemantica(b.dataset.sem, b); });
+  });
+
+  inicializarDiagnostico();
+
+  var btnRevelar = document.getElementById('btnRevelarCaos');
+  if (btnRevelar) btnRevelar.addEventListener('click', function () {
+    var caixa = document.getElementById('feedback-caos');
+    if (!caixa) return;
+    var visivel = caixa.classList.toggle('mostrar');
+    btnRevelar.textContent = visivel ? '🙈 Esconder' : '👀 Revelar os erros';
+  });
+
+  inicializarQuestoes();
+
+  var btnCorrigir = document.getElementById('btnCorrigir');
+  if (btnCorrigir) btnCorrigir.addEventListener('click', corrigirQuiz);
+  var btnLimpar = document.getElementById('btnLimpar');
+  if (btnLimpar) btnLimpar.addEventListener('click', limparRespostas);
+  var btnCopiar = document.getElementById('btnCopiarRel');
+  if (btnCopiar) btnCopiar.addEventListener('click', function () { copiarRelatorio(btnCopiar); });
+  var btnImprimir = document.getElementById('btnImprimir');
+  if (btnImprimir) btnImprimir.addEventListener('click', imprimirRelatorioPDF);
+  var btnTopo = document.getElementById('btnTopo');
+  if (btnTopo) btnTopo.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  atualizarProgressoQuiz();
+});
+</script>
+</body>
+</html>
