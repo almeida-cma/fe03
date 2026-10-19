@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 TEMA 03 • Arena de Desafios HTML &amp; Glossário Interativo</title>
+    <style>
+        :root {
+            --bg-body: #090d16;
+            --surface-dark: #111827;
+            --surface-card: #ffffff;
+            --primary: #ea580c;
+            --primary-hover: #c2410c;
+            --primary-light: #fb923c;
+            --blue-accent: #0284c7;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+            --rose: #ef4444;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --radius-lg: 18px;
+            --transicao: all 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 10% 15%, #2a1506 0%, #090d16 65%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 24px 14px 80px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #c2410c 0%, #ea580c 50%, #f59e0b 100%);
+            border-radius: var(--radius-lg);
+            padding: 34px 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 12px 35px rgba(234, 88, 12, 0.35);
+        }
+
+        .header h1 {
+            font-size: 2.1rem;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header h1 span { color: #fef08a; }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 1.02rem;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        /* NAVEGAÇÃO PRINCIPAL */
+        .tabs-modulo {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-modulo {
+            background: #111827;
+            color: #94a3b8;
+            border: 1px solid var(--border-dark);
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transicao);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-modulo:hover { color: #fff; background: #1f293d; }
+        .btn-modulo.active {
+            background: linear-gradient(135deg, #c2410c, #ea580c);
+            color: #fff;
+            border-color: #fb923c;
+            box-shadow: 0 0 16px rgba(234, 88, 12, 0.45);
+        }
+
+        .modulo-conteudo { display: none; animation: fadeIn 0.3s ease-out; }
+        .modulo-conteudo.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PLACAR */
+        .placar-geral {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111827;
+            border: 2px solid var(--border-dark);
+            border-radius: 14px;
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            color: #fff;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .placar-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .barra-progresso {
+            width: 240px;
+            height: 10px;
+            background: #334155;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .barra-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #fb923c, #10b981);
+            transition: width 0.4s ease;
+        }
+
+        /* NAVEGAÇÃO DOS DESAFIOS */
+        .desafios-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .desafio-btn {
+            background: #111827;
+            color: #94a3b8;
+            border: 1px solid var(--border-dark);
+            padding: 9px 16px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transicao);
+            font-family: inherit;
+        }
+
+        .desafio-btn:hover { color: #fff; background: #1e293b; }
+        .desafio-btn.active {
+            background: #ea580c;
+            color: #fff;
+            border-color: #fb923c;
+        }
+
+        .desafio-btn.concluido::after {
+            content: "✓";
+            background: #10b981;
+            color: #042f2e;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+        }
+
+        /* GRID DA ARENA */
+        .arena-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card-box {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-light);
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .box-titulo {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .badge-status {
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .badge-alvo { background: #ffedd5; color: #9a3412; }
+        .badge-editor { background: #e0f2fe; color: #0369a1; }
+
+        .preview-alvo-frame {
+            width: 100%;
+            height: 310px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            overflow: auto;
+        }
+
+        /* CHIPS DE VALIDAÇÃO (CORRIGIDOS) */
+        .chips-requisitos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chip-tag {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1.5px solid #cbd5e1;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transicao);
+        }
+
+        .chip-tag code {
+            background: #e2e8f0;
+            color: #c2410c;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: 800;
+        }
+
+        .chip-tag .chip-icon {
+            font-weight: bold;
+            color: #94a3b8;
+        }
+
+        .chip-tag.atendida {
+            background: #dcfce7;
+            color: #14532d;
+            border-color: #86efac;
+        }
+
+        .chip-tag.atendida code {
+            background: #bbf7d0;
+            color: #15803d;
+        }
+
+        .chip-tag.atendida .chip-icon {
+            color: #16a34a;
+        }
+
+        /* EDITOR E LIVE PREVIEW */
+        .editor-wrapper {
+            background: #090d16;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-dark);
+        }
+
+        .editor-barra-botoes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111827;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-dark);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .btn-acao {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transicao);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: inherit;
+        }
+
+        .btn-oc { background: #ea580c; color: white; }
+        .btn-oc:hover { background: #c2410c; }
+        .btn-dica { background: #334155; color: #fde047; }
+        .btn-dica:hover { background: #475569; }
+        .btn-limpar { background: transparent; color: #f87171; border: 1px solid #450a0a; }
+        .btn-limpar:hover { background: #450a0a; }
+
+        .editor-area {
+            width: 100%;
+            height: 220px;
+            background: #090d16;
+            color: #f8fafc;
+            border: none;
+            padding: 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.86rem;
+            line-height: 1.6;
+            outline: none;
+            resize: vertical;
+        }
+
+        .preview-aluno-frame {
+            width: 100%;
+            height: 220px;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: #fff;
+            margin-top: 10px;
+        }
+
+        /* PAINEL DE DICA CONCEITUAL */
+        .dica-box {
+            display: none;
+            background: #fffbe8;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #854d0e;
+            line-height: 1.5;
+        }
+
+        .dica-box.aberta { display: block; animation: fadeIn 0.25s ease; }
+
+        /* ============================================================
+           GLOSSÁRIO DE TAGS INTERATIVO (24 TAGS COM EXEMPLOS)
+           ============================================================ */
+        .glossario-filtros {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filtro-btn {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .filtro-btn.active, .filtro-btn:hover {
+            background: #ea580c;
+            color: #fff;
+            border-color: #ea580c;
+        }
+
+        .glossario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .card-tag {
+            background: #ffffff;
+            border: 1.5px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            transition: var(--transicao);
+        }
+
+        .card-tag:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px rgba(234, 88, 12, 0.12);
+        }
+
+        .card-tag-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .tag-nome {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #c2410c;
+        }
+
+        .tag-categoria {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .tag-desc {
+            font-size: 0.84rem;
+            color: #475569;
+            margin-bottom: 10px;
+            line-height: 1.45;
+        }
+
+        .exemplo-box {
+            position: relative;
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 10px 12px;
+            overflow-x: auto;
+        }
+
+        .exemplo-codigo {
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            color: #38bdf8;
+            white-space: pre-wrap;
+            display: block;
+        }
+
+        .btn-copiar-exemplo {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #334155;
+            color: #fff;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-copiar-exemplo:hover { background: #10b981; }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 9999;
+        }
+
+        /* FOOTER */
+        .footer-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 26px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .footer-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #2c3e50;
+            border: 2px solid #28a745;
+            font-size: 0.95rem;
+            max-width: 480px;
+            margin: 12px auto 0;
+            transition: var(--transicao);
+        }
+
+        .footer-link:hover {
+            transform: translateY(-2px);
+            background: #f0fdf4;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.2);
+        }
+
+        @media (max-width: 860px) {
+            .arena-grid { grid-template-columns: 1fr; }
+            .preview-alvo-frame { height: 250px; }
+            .header h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fef08a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2l1.6 18 6.4 2 6.4-2L20 2H4z"/>
+                <path d="M7 6h10l-.5 5H8l.3 3.5 3.7 1 3.7-1 .3-3"/>
+            </svg>
+            TEMA <span>03</span> &bull; Arena de Desafios &amp; Glossário
+        </h1>
+        <p>Aprenda construindo: examine o resultado visual, escreva seu código HTML e valide etiquetas em tempo real sem copiar e colar!</p>
+    </header>
+
+    <!-- NAVEGAÇÃO PRINCIPAL (DESAFIOS vs GLOSSÁRIO) -->
+    <nav class="tabs-modulo">
+        <button class="btn-modulo active" onclick="trocarModulo('modulo-desafios', this)">
+            🎯 1. Arena de Desafios (Engenharia Reversa)
+        </button>
+        <button class="btn-modulo" onclick="trocarModulo('modulo-glossario', this)">
+            📚 2. Glossário de Tags com Exemplos
+        </button>
+    </nav>
+
+    <!-- ============================================================
+    MÓDULO 1: ARENA DE DESAFIOS (ENGENHARIA REVERSA)
+    ============================================================ -->
+    <section id="modulo-desafios" class="modulo-conteudo active">
+        
+        <!-- PLACAR GERAL -->
+        <div class="placar-geral">
+            <div class="placar-info">
+                <span>🏆 Desafios Concluídos:</span>
+                <strong id="txtPlacar">0 de 5</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="barra-progresso">
+                    <div class="barra-fill" id="barraFill"></div>
+                </div>
+                <span id="txtPorcentagem" style="font-size:0.85rem; font-weight:bold; color:#fb923c;">0%</span>
+            </div>
+        </div>
+
+        <!-- SELETOR DE DESAFIOS -->
+        <div class="desafios-nav" id="menuDesafios">
+            <button class="desafio-btn active" onclick="carregarDesafio(1, this)">1. Notícia Científica</button>
+            <button class="desafio-btn" onclick="carregarDesafio(2, this)">2. Card de Contatos</button>
+            <button class="desafio-btn" onclick="carregarDesafio(3, this)">3. Menu com Listas</button>
+            <button class="desafio-btn" onclick="carregarDesafio(4, this)">4. FAQ com Sanfonas</button>
+            <button class="desafio-btn" onclick="carregarDesafio(5, this)">5. Artigo Semântico</button>
+        </div>
+
+        <!-- ARENA: ALVO vs EDITOR -->
+        <div class="arena-grid">
+            
+            <!-- ESQUERDA: O ALVO VISUAL (META) -->
+            <div class="coluna-alvo">
+                <div class="card-box">
+                    <div class="box-header">
+                        <span class="box-titulo">🎯 Resultado Esperado (Alvo Visual)</span>
+                        <span class="badge-status badge-alvo">META DE CÓDIGO</span>
+                    </div>
+                    <p style="font-size:0.85rem; color:#64748b; margin-bottom:10px;" id="descDesafio"></p>
+
+                    <!-- Renderização do Alvo -->
+                    <iframe class="preview-alvo-frame" id="frameAlvo"></iframe>
+
+                    <!-- Chips de Validação (Com escape corrigido!) -->
+                    <div style="margin-top:16px;">
+                        <strong style="font-size:0.84rem; color:#0f172a; display:block; margin-bottom:4px;">
+                            Etiquetas Obrigatórias (Validação em Tempo Real):
+                        </strong>
+                        <div class="chips-requisitos" id="listaRequisitos">
+                            <!-- Gerado dinamicamente com escape correto de tags -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIREITA: EDITOR E LIVE PREVIEW DO ALUNO -->
+            <div class="coluna-editor">
+                <div class="card-box">
+                    <div class="box-header">
+                        <span class="box-titulo">💻 Seu Código Fonte HTML</span>
+                        <span class="badge-status badge-editor">DIGITE AQUI</span>
+                    </div>
+
+                    <div class="editor-wrapper">
+                        <div class="editor-barra-botoes">
+                            <span style="color:#fb923c; font-size:0.75rem; font-family:monospace; font-weight:bold;">meu-codigo.html</span>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn-acao btn-oc" onclick="abrirNoOneCompiler()">▶️ OneCompiler</button>
+                                <button class="btn-acao btn-dica" onclick="toggleDica()">💡 Dica de Sintaxe</button>
+                                <button class="btn-acao btn-limpar" onclick="limparEditor()">🔄 Limpar</button>
+                            </div>
+                        </div>
+                        <textarea class="editor-area" id="editorAluno" placeholder="Comece a digitar o HTML aqui para ver a mágica acontecer..." oninput="processarCodigoAluno()"></textarea>
+                    </div>
+
+                    <!-- Caixa de Dica Pedagógica -->
+                    <div class="dica-box" id="caixaDica">
+                        <strong>💡 Dica do Professor:</strong> <span id="textoDica"></span>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div style="margin-top:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-size:0.84rem; color:#0f172a;">🧪 Sua Pré-visualização ao Vivo:</strong>
+                            <span id="statusConclusao" style="font-size:0.75rem; font-weight:bold; color:#ea580c;">Pendente</span>
+                        </div>
+                        <iframe class="preview-aluno-frame" id="frameAluno"></iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+    MÓDULO 2: GLOSSÁRIO DE CONSULTA RÁPIDA (24 TAGS COM EXEMPLOS)
+    ============================================================ -->
+    <section id="modulo-glossario" class="modulo-conteudo">
+        <div class="card-box">
+            <div class="box-header">
+                <div>
+                    <span class="box-titulo">📚 Glossário de Tags do Tema 03</span>
+                    <p style="font-size:0.85rem; color:#64748b; margin-top:2px;">Consulte como cada etiqueta funciona e copie exemplos de sintaxe para usar nos desafios.</p>
+                </div>
+            </div>
+
+            <!-- Filtros de Categoria -->
+            <div class="glossario-filtros">
+                <button class="filtro-btn active" onclick="filtrarGlossario('todos', this)">Todas as Tags</button>
+                <button class="filtro-btn" onclick="filtrarGlossario('estrutura', this)">Estrutura</button>
+                <button class="filtro-btn" onclick="filtrarGlossario('texto', this)">Títulos &amp; Texto</button>
+                <button class="filtro-btn" onclick="filtrarGlossario('links', this)">Links &amp; Mídia</button>
+                <button class="filtro-btn" onclick="filtrarGlossario('listas', this)">Listas</button>
+                <button class="filtro-btn" onclick="filtrarGlossario('semantica', this)">Semântica HTML5</button>
+                <button class="filtro-btn" onclick="filtrarGlossario('interativo', this)">Interatividade</button>
+            </div>
+
+            <!-- Grid de Tags -->
+            <div class="glossario-grid" id="gridGlossario">
+                <!-- Injetado dinamicamente via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-card">
+        <h4 style="color:#0f172a; font-size:0.95rem;">📋 Concluiu os Desafios Práticos?</h4>
+        <p style="font-size:0.85rem; color:#64748b; margin-top:4px;">
+            Envie seus códigos no formulário oficial da disciplina para validação da pontuação:
+        </p>
+        <a href="https://forms.gle/zbUB57A4FteUDsKSA" target="_blank" rel="noopener noreferrer" class="footer-link">
+            <span style="font-size:1.4rem;">📝</span>
+            <div style="text-align:left; flex:1;">
+                <strong>Enviar Relatório de Desafios do Tema 03</strong>
+                <small style="display:block; color:#64748b; font-size:0.75rem;">Cole seus códigos ou anexe os arquivos</small>
+            </div>
+            <span style="font-weight:bold; color:#28a745;">&rarr;</span>
+        </a>
+    </footer>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastMsg">✅ Exemplo copiado!</div>
+
+<script>
+    /* ============================================================
+       BANCO DE DADOS: GLOSSÁRIO DE TAGS (COM EXEMPLOS PRÁTICOS)
+       ============================================================ */
+    const BANCO_GLOSSARIO = [
+        // Estrutura
+        { tag: "<html>", cat: "estrutura", desc: "Elemento raiz de todo documento HTML.", ex: "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n  ...\n</html>" },
+        { tag: "<head>", cat: "estrutura", desc: "Guarda configurações e metadados invisíveis.", ex: "<head>\n  <meta charset=\"UTF-8\">\n  <title>Meu Site</title>\n</head>" },
+        { tag: "<title>", cat: "estrutura", desc: "Define o nome que aparece na aba do navegador.", ex: "<title>Página Inicial - Meu Portal</title>" },
+        { tag: "<body>", cat: "estrutura", desc: "Abriga todo o conteúdo visível aos internautas.", ex: "<body>\n  <h1>Conteúdo visível</h1>\n</body>" },
+        { tag: "<div>", cat: "estrutura", desc: "Divisor genérico em bloco para agrupar elementos.", ex: "<div class=\"cartao\">\n  <p>Texto agrupado</p>\n</div>" },
+        { tag: "<!-- -->", cat: "estrutura", desc: "Comentário que não é exibido pelo navegador.", ex: "<!-- Este é um comentário explicativo -->" },
+
+        // Textos & Formatação
+        { tag: "<h1> a <h6>", cat: "texto", desc: "Hierarquia de títulos (h1 mais importante, h6 menor).", ex: "<h1>Título Principal</h1>\n<h2>Subtítulo</h2>" },
+        { tag: "<p>", cat: "texto", desc: "Cria um parágrafo de texto comum.", ex: "<p>Este é um parágrafo bem formatado.</p>" },
+        { tag: "<strong>", cat: "texto", desc: "Negrito com relevância semântica (mais recomendado que <b>).", ex: "Texto com <strong>forte importância</strong>." },
+        { tag: "<em>", cat: "texto", desc: "Itálico com ênfase de leitura (mais recomendado que <i>).", ex: "Texto com <em>ênfase especial</em>." },
+        { tag: "<mark>", cat: "texto", desc: "Aplica realce com cor de caneta marca-texto.", ex: "Prazo final: <mark>amanhã</mark>!" },
+        { tag: "<hr>", cat: "texto", desc: "Linha horizontal para quebra temática de seção.", ex: "<h3>Capítulo 1</h3>\n<hr>\n<p>Início...</p>" },
+        { tag: "<br>", cat: "texto", desc: "Quebra de linha imediata dentro do texto (void element).", ex: "Rua das Flores, 123<br>São Paulo - SP" },
+        { tag: "<del> e <ins>", cat: "texto", desc: "Texto excluído (riscado) e texto inserido (novo).", ex: "De <del>R$ 50,00</del> por <ins>R$ 29,90</ins>." },
+
+        // Links & Mídias
+        { tag: "<a href>", cat: "links", desc: "Cria hiperlinks para outras páginas ou URLs.", ex: "<a href=\"https://google.com\">Ir ao Google</a>" },
+        { tag: "<a> com tel:", cat: "links", desc: "Link que aciona o discador do celular ao clique.", ex: "<a href=\"tel:+5511999990000\">Ligar Agora</a>" },
+        { tag: "<a> com mailto:", cat: "links", desc: "Abre o cliente de e-mail com destinatário pronto.", ex: "<a href=\"mailto:contato@site.com\">Enviar E-mail</a>" },
+        { tag: "<a> com âncora", cat: "links", desc: "Rola a página até um elemento com o id correspondente.", ex: "<a href=\"#rodape\">Ir ao Rodapé</a>\n...\n<footer id=\"rodape\">" },
+        { tag: "<img>", cat: "links", desc: "Exibe imagens na tela. O atributo alt é obrigatório.", ex: "<img src=\"foto.jpg\" alt=\"Paisagem ao pôr do sol\" width=\"300\">" },
+
+        // Listas
+        { tag: "<ul> e <li>", cat: "listas", desc: "Lista não ordenada (itens com marcadores/bullets).", ex: "<ul>\n  <li>Café</li>\n  <li>Açúcar</li>\n</ul>" },
+        { tag: "<ol> e <li>", cat: "listas", desc: "Lista ordenada numericamente ou alfabeticamente.", ex: "<ol type=\"1\" start=\"5\">\n  <li>Passo cinco</li>\n  <li>Passo seis</li>\n</ol>" },
+        { tag: "<ol reversed>", cat: "listas", desc: "Gera contagem regressiva (decrescente).", ex: "<ol reversed>\n  <li>Ouro</li>\n  <li>Prata</li>\n  <li>Bronze</li>\n</ol>" },
+
+        // Semântica HTML5
+        { tag: "<header> & <nav>", cat: "semantica", desc: "Cabeçalho da página ou seção e menu de navegação.", ex: "<header>\n  <h1>Meu Site</h1>\n  <nav><a href=\"#\">Início</a></nav>\n</header>" },
+        { tag: "<main> & <article>", cat: "semantica", desc: "Conteúdo central único (<main>) e bloco autônomo (<article>).", ex: "<main>\n  <article>\n    <h2>Notícia</h2>\n  </article>\n</main>" },
+        { tag: "<figure> & <figcaption>", cat: "semantica", desc: "Imagem ou ilustração vinculada a uma legenda explicativa.", ex: "<figure>\n  <img src=\"mapa.png\" alt=\"Mapa mundi\">\n  <figcaption>Figura 1: Rotas</figcaption>\n</figure>" },
+        { tag: "<footer>", cat: "semantica", desc: "Rodapé com direitos autorais e dados de contato.", ex: "<footer>\n  <p>&copy; 2026 Todos os direitos reservados</p>\n</footer>" },
+
+        // Interatividade
+        { tag: "<details> & <summary>", cat: "interativo", desc: "Sanfona retrátil nativa que abre e fecha sem JavaScript.", ex: "<details>\n  <summary>Clique para ler</summary>\n  <p>Conteúdo revelado!</p>\n</details>" }
+    ];
+
+    /* ============================================================
+       BANCO DE DESAFIOS (COM ESCAPE SEGURO DOS CHIPS)
+       ============================================================ */
+    const BANCO_DESAFIOS = [
+        {
+            id: 1,
+            titulo: "Notícia Científica com Destaques",
+            desc: "Crie a manchete e o corpo de uma notícia sobre o telescópio espacial. Use títulos hierárquicos, parágrafos, negrito, itálico, linha divisória e texto com marca-texto.",
+            dica: "Lembre-se: use <h1> para o título principal, <h2> para a linha fina/subtítulo, <hr> para a divisória e <mark> para a data destacada.",
+            requisitos: [
+                { id: "h1", tagNome: "<h1>", rotulo: "Título Principal", regex: /<h1[^>]*>[\s\S]*?<\/h1>/i },
+                { id: "h2", tagNome: "<h2>", rotulo: "Subtítulo / Linha Fina", regex: /<h2[^>]*>[\s\S]*?<\/h2>/i },
+                { id: "p", tagNome: "<p>", rotulo: "Parágrafo", regex: /<p[^>]*>[\s\S]*?<\/p>/i },
+                { id: "negrito", tagNome: "<strong> ou <b>", rotulo: "Texto em Negrito", regex: /<(strong|b)[^>]*>[\s\S]*?<\/(strong|b)>/i },
+                { id: "italico", tagNome: "<em> ou <i>", rotulo: "Texto em Itálico", regex: /<(em|i)[^>]*>[\s\S]*?<\/(em|i)>/i },
+                { id: "hr", tagNome: "<hr>", rotulo: "Linha divisória", regex: /<hr[^>]*\/?>/i },
+                { id: "mark", tagNome: "<mark>", rotulo: "Realce com marca-texto", regex: /<mark[^>]*>[\s\S]*?<\/mark>/i }
+            ],
+            alvoHtml: `<h1>Novo Telescópio Revela Galáxias Primitivas</h1>
+<h2>Observações confirmam estrelas formadas logo após o Big Bang</h2>
+<hr>
+<p>Astrônomos confirmaram hoje a descoberta de <strong>sete novas galáxias</strong> situadas nos limites do universo observável.</p>
+<p>Os dados recolhidos foram descritos como uma façanha <em>verdadeiramente histórica</em> pela comunidade de astrofísica.</p>
+<p>O relatório completo com as imagens será disponibilizado na <mark>próxima terça-feira</mark>.</p>`
+        },
+        {
+            id: 2,
+            titulo: "Cartão de Ações Móveis & Contatos",
+            desc: "Monte um card de visitas pessoal com fotografia (com texto alternativo), links para ligação rápida (tel:), envio de e-mail (mailto:) e link seguro com target='_blank'.",
+            dica: "A tag <img> precisa dos atributos src e alt. Para o telefone use href='tel:+55...' e para o link externo use target='_blank' junto com rel='noopener noreferrer'.",
+            requisitos: [
+                { id: "img", tagNome: "<img>", rotulo: "Imagem com src e alt", regex: /<img[^>]+src=["'][^"']+["'][^>]+alt=["'][^"']+["'][^>]*\/?>|<img[^>]+alt=["'][^"']+["'][^>]+src=["'][^"']+["'][^>]*\/?>/i },
+                { id: "tel", tagNome: "<a href='tel:...'>", rotulo: "Link telefônico", regex: /<a[^>]+href=["']tel:[^"']+["'][^>]*>/i },
+                { id: "mailto", tagNome: "<a href='mailto:...'>", rotulo: "Link de e-mail", regex: /<a[^>]+href=["']mailto:[^"']+["'][^>]*>/i },
+                { id: "blank", tagNome: "target='_blank'", rotulo: "Abrir em nova aba", regex: /target=["']_blank["']/i },
+                { id: "rel", tagNome: "rel='noopener...'", rotulo: "Segurança de aba externa", regex: /rel=["'][^"']*noopener[^"']*["']/i }
+            ],
+            alvoHtml: `<div>
+  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop" 
+       alt="Foto de perfil de Marina Lima" 
+       width="100" height="100">
+  
+  <h2>Marina Lima</h2>
+  <p>Desenvolvedora Front-End</p>
+
+  <p><a href="tel:+5511988887777">📞 Ligar: (11) 98888-7777</a></p>
+  <p><a href="mailto:marina@exemplo.com">✉️ Enviar Mensagem</a></p>
+  <p><a href="https://github.com" target="_blank" rel="noopener noreferrer">🌐 Acessar GitHub</a></p>
+</div>`
+        },
+        {
+            id: 3,
+            titulo: "Cardápio com Listas Aninhadas e Preços",
+            desc: "Crie a seção de um cardápio: os cafés especiais devem estar numa lista não ordenada (ul), as opções de leite aninhadas dentro do café, e uma lista regressiva (ol reversed) com preços antigos riscados e novos.",
+            dica: "Para aninhar uma lista, coloque a tag <ul> dentro do <li> correspondente antes de fechar </li>. Para preços use <del> e <ins>.",
+            requisitos: [
+                { id: "ul", tagNome: "<ul>", rotulo: "Lista não ordenada", regex: /<ul[^>]*>[\s\S]*?<\/ul>/i },
+                { id: "aninhada", tagNome: "<li><ul>", rotulo: "Lista aninhada em item", regex: /<li[^>]*>[\s\S]*?<ul[^>]*>[\s\S]*?<\/ul>[\s\S]*?<\/li>/i },
+                { id: "reversed", tagNome: "<ol reversed>", rotulo: "Lista com contagem regressiva", regex: /<ol[^>]*\breversed\b[^>]*>/i },
+                { id: "del", tagNome: "<del>", rotulo: "Preço antigo riscado", regex: /<del[^>]*>[\s\S]*?<\/del>/i },
+                { id: "ins", tagNome: "<ins>", rotulo: "Preço novo inserido", regex: /<ins[^>]*>[\s\S]*?<\/ins>/i }
+            ],
+            alvoHtml: `<h3>☕ Cafeteria do Bairro</h3>
+<p>Bebidas Especiais:</p>
+<ul>
+  <li>Café Expresso Tradicional</li>
+  <li>Capuccino Cremoso
+    <ul>
+      <li>Opção com leite integral</li>
+      <li>Opção com leite vegetal</li>
+    </ul>
+  </li>
+</ul>
+
+<h4>Top 3 Mais Pedidos (Regressivo):</h4>
+<ol reversed>
+  <li>Mocha com Chocolate &bull; De <del>R$ 16,00</del> por <ins>R$ 12,00</ins></li>
+  <li>Latte com Canela</li>
+  <li>Cold Brew Gelado</li>
+</ol>`
+        },
+        {
+            id: 4,
+            titulo: "FAQ Retrátil sem JavaScript",
+            desc: "Crie uma página de perguntas frequentes contendo menu de âncoras internas no topo (#id) e perguntas retráteis usando exclusivamente as tags nativas <details> e <summary>.",
+            dica: "O <summary> é o título clicável dentro do <details>. Para navegar internamente, o <a href='#faq-1'> aponta para o <details id='faq-1'>.",
+            requisitos: [
+                { id: "nav", tagNome: "<nav>", rotulo: "Navegação no topo", regex: /<nav[^>]*>[\s\S]*?<\/nav>/i },
+                { id: "ancora", tagNome: "<a href='#...'>", rotulo: "Link com âncora interna", regex: /<a[^>]+href=["']#[^"']+["'][^>]*>/i },
+                { id: "details", tagNome: "<details>", rotulo: "Sanfona retrátil", regex: /<details[^>]*>[\s\S]*?<\/details>/i },
+                { id: "summary", tagNome: "<summary>", rotulo: "Título clicável da sanfona", regex: /<summary[^>]*>[\s\S]*?<\/summary>/i },
+                { id: "id", tagNome: "id='...'", rotulo: "Atributo id de destino", regex: /<details[^>]+id=["'][^"']+["'][^>]*>/i }
+            ],
+            alvoHtml: `<nav>
+  <strong>Índice:</strong>
+  <a href="#duvida-1">Dúvida 1</a> |
+  <a href="#duvida-2">Dúvida 2</a>
+</nav>
+
+<h2>Perguntas Frequentes</h2>
+
+<details id="duvida-1" open>
+  <summary>Qual a diferença entre HTML e CSS?</summary>
+  <p>O HTML estrutura o conteúdo da página, enquanto o CSS é responsável pelas cores, fontes e posicionamento visual.</p>
+</details>
+
+<details id="duvida-2">
+  <summary>O que são elementos vazios?</summary>
+  <p>São tags que não possuem fechamento porque não envolvem texto, como as tags img, hr e br.</p>
+</details>`
+        },
+        {
+            id: 5,
+            titulo: "Matéria Semântica com Legenda",
+            desc: "Construa uma matéria de blog completa com semântica HTML5 estrita: <header> com navegação, <main> com <article>, imagem dentro de <figure> com <figcaption> e <footer>.",
+            dica: "A tag <main> deve envolver o artigo principal. A foto fica em <figure> acompanhada de sua legenda em <figcaption>.",
+            requisitos: [
+                { id: "header", tagNome: "<header>", rotulo: "Cabeçalho semântico", regex: /<header[^>]*>[\s\S]*?<\/header>/i },
+                { id: "nav", tagNome: "<nav>", rotulo: "Barra de navegação", regex: /<nav[^>]*>[\s\S]*?<\/nav>/i },
+                { id: "main", tagNome: "<main>", rotulo: "Conteúdo principal", regex: /<main[^>]*>[\s\S]*?<\/main>/i },
+                { id: "article", tagNome: "<article>", rotulo: "Artigo autônomo", regex: /<article[^>]*>[\s\S]*?<\/article>/i },
+                { id: "figure", tagNome: "<figure>", rotulo: "Container de ilustração", regex: /<figure[^>]*>[\s\S]*?<\/figure>/i },
+                { id: "figcaption", tagNome: "<figcaption>", rotulo: "Legenda da figura", regex: /<figcaption[^>]*>[\s\S]*?<\/figcaption>/i },
+                { id: "footer", tagNome: "<footer>", rotulo: "Rodapé institucional", regex: /<footer[^>]*>[\s\S]*?<\/footer>/i }
+            ],
+            alvoHtml: `<header>
+  <h1>Blog do Desenvolvedor</h1>
+  <nav>
+    <a href="#artigo">Artigo</a> |
+    <a href="#sobre">Sobre</a>
+  </nav>
+</header>
+
+<main>
+  <article id="artigo">
+    <h2>A Importância da Semântica Web</h2>
+    <p>A semântica garante que leitores de tela e robôs de busca compreendam a função real de cada bloco da interface.</p>
+    
+    <figure>
+      <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=320&h=160&fit=crop" 
+           alt="Programador escrevendo código em notebook">
+      <figcaption>Figura: Desenvolvimento de software baseado em boas práticas.</figcaption>
+    </figure>
+  </article>
+</main>
+
+<footer>
+  <p>&copy; 2026 Blog do Desenvolvedor &bull; Todos os direitos reservados.</p>
+</footer>`
+        }
+    ];
+
+    /* ============================================================
+       FUNÇÃO UTILITÁRIA PARA ESCAPE SEGURO DE HTML
+       ============================================================ */
+    function escaparTexto(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    const ESTILO_IFRAME_BASE = `
+        <style>
+            body { font-family: system-ui, -apple-system, sans-serif; padding: 14px; color: #1e293b; line-height: 1.5; font-size: 13.5px; }
+            h1 { font-size: 1.35rem; color: #c2410c; margin-bottom: 6px; }
+            h2 { font-size: 1.15rem; color: #0f172a; margin: 10px 0 4px; }
+            h3 { font-size: 1.05rem; color: #334155; margin: 8px 0 4px; }
+            h4 { font-size: 0.95rem; color: #475569; margin: 8px 0 4px; }
+            p { margin-bottom: 8px; }
+            hr { border: 0; border-top: 1px solid #cbd5e1; margin: 10px 0; }
+            mark { background: #fef08a; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+            a { color: #0284c7; font-weight: bold; }
+            img { max-width: 100%; border-radius: 8px; display: block; margin: 6px 0; }
+            figure { margin: 10px 0; background: #f8fafc; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; }
+            figcaption { font-size: 12px; color: #64748b; font-style: italic; margin-top: 4px; }
+            details { background: #f8fafc; border: 1px solid #cbd5e1; padding: 8px; border-radius: 6px; margin-bottom: 8px; }
+            summary { font-weight: bold; cursor: pointer; color: #c2410c; }
+            ins { color: #16a34a; text-decoration: none; font-weight: bold; }
+            del { color: #94a3b8; }
+            footer { border-top: 1px solid #e2e8f0; margin-top: 12px; font-size: 12px; color: #64748b; }
+        </style>
+    `;
+
+    let desafioAtualId = 1;
+    const desafiosConcluidos = new Set();
+
+    /* ============================================================
+       NAVEGAÇÃO ENTRE MÓDULOS (DESAFIOS vs GLOSSÁRIO)
+       ============================================================ */
+    function trocarModulo(moduloId, btn) {
+        document.querySelectorAll('.btn-modulo').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.modulo-conteudo').forEach(m => m.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(moduloId).classList.add('active');
+    }
+
+    /* ============================================================
+       CARREGAMENTO DE DESAFIO
+       ============================================================ */
+    function carregarDesafio(id, btn) {
+        desafioAtualId = id;
+        
+        if (btn) {
+            document.querySelectorAll('.desafio-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        const d = BANCO_DESAFIOS.find(item => item.id === id);
+        if (!d) return;
+
+        document.getElementById('descDesafio').innerText = d.desc;
+        document.getElementById('textoDica').innerText = d.dica;
+        document.getElementById('caixaDica').classList.remove('aberta');
+
+        // Renderiza o Alvo no iframe
+        const frameAlvo = document.getElementById('frameAlvo');
+        frameAlvo.srcdoc = `<!DOCTYPE html><html><head>${ESTILO_IFRAME_BASE}</head><body>${d.alvoHtml}</body></html>`;
+
+        // Renderiza requisitos com escape seguro de HTML!
+        renderizarRequisitos(d);
+
+        // Limpa editor para nova tentativa
+        document.getElementById('editorAluno').value = "";
+        processarCodigoAluno();
+    }
+
+    /* ============================================================
+       RENDERIZADOR DE CHIPS COM ESCAPE CORRIGIDO (SEM "ou ou")
+       ============================================================ */
+    function renderizarRequisitos(desafio) {
+        const cont = document.getElementById('listaRequisitos');
+        cont.innerHTML = "";
+
+        desafio.requisitos.forEach(req => {
+            const span = document.createElement('span');
+            span.className = 'chip-tag';
+            span.id = `req-${req.id}`;
+            
+            // Usamos escaparTexto para que tags como <strong> e <b> não sejam engolidas pelo navegador!
+            span.innerHTML = `<span class="chip-icon">○</span> <code>${escaparTexto(req.tagNome)}</code> <span>${escaparTexto(req.rotulo)}</span>`;
+            
+            cont.appendChild(span);
+        });
+    }
+
+    /* ============================================================
+       ANALISADOR EM TEMPO REAL DO CÓDIGO DO ALUNO
+       ============================================================ */
+    function processarCodigoAluno() {
+        const d = BANCO_DESAFIOS.find(item => item.id === desafioAtualId);
+        if (!d) return;
+
+        const codigo = document.getElementById('editorAluno').value;
+        
+        // Atualiza o iframe do aluno ao vivo
+        const frameAluno = document.getElementById('frameAluno');
+        frameAluno.srcdoc = `<!DOCTYPE html><html><head>${ESTILO_IFRAME_BASE}</head><body>${codigo}</body></html>`;
+
+        let todosAtendidos = true;
+        let atendidosCount = 0;
+
+        d.requisitos.forEach(req => {
+            const elChip = document.getElementById(`req-${req.id}`);
+            const bateu = req.regex.test(codigo);
+
+            if (bateu) {
+                elChip.classList.add('atendida');
+                elChip.querySelector('.chip-icon').textContent = '✓';
+                atendidosCount++;
+            } else {
+                elChip.classList.remove('atendida');
+                elChip.querySelector('.chip-icon').textContent = '○';
+                todosAtendidos = false;
+            }
+        });
+
+        const statusLbl = document.getElementById('statusConclusao');
+        const btnNav = document.querySelectorAll('.desafio-btn')[desafioAtualId - 1];
+
+        if (todosAtendidos && codigo.trim().length > 25) {
+            statusLbl.innerText = "✅ Desafio Concluído!";
+            statusLbl.style.color = "#10b981";
+            desafiosConcluidos.add(desafioAtualId);
+            btnNav.classList.add('concluido');
+        } else {
+            statusLbl.innerText = `Pendente (${atendidosCount}/${d.requisitos.length})`;
+            statusLbl.style.color = "#ea580c";
+        }
+
+        atualizarPlacarGeral();
+    }
+
+    function atualizarPlacarGeral() {
+        const total = BANCO_DESAFIOS.length;
+        const concluidos = desafiosConcluidos.size;
+        const pct = Math.round((concluidos / total) * 100);
+
+        document.getElementById('txtPlacar').innerText = `${concluidos} de ${total}`;
+        document.getElementById('barraFill').style.width = pct + '%';
+        document.getElementById('txtPorcentagem').innerText = pct + '%';
+    }
+
+    function toggleDica() {
+        document.getElementById('caixaDica').classList.toggle('aberta');
+    }
+
+    function limparEditor() {
+        if (!confirm("Deseja apagar o código para recomeçar o desafio?")) return;
+        document.getElementById('editorAluno').value = "";
+        processarCodigoAluno();
+    }
+
+    function abrirNoOneCompiler() {
+        const cod = document.getElementById('editorAluno').value || "<!-- Comece a digitar seu código aqui -->";
+        const htmlCompleto = `<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n  <meta charset="UTF-8">\n  <title>Desafio HTML5</title>\n</head>\n<body>\n${cod}\n</body>\n</html>`;
+        const url = 'https://onecompiler.com/html?code=' + encodeURIComponent(htmlCompleto);
+        window.open(url, '_blank');
+    }
+
+    /* ============================================================
+       RENDERIZADOR DO GLOSSÁRIO
+       ============================================================ */
+    function renderizarGlossario(filtro = 'todos') {
+        const grid = document.getElementById('gridGlossario');
+        grid.innerHTML = "";
+
+        const itens = filtro === 'todos' 
+            ? BANCO_GLOSSARIO 
+            : BANCO_GLOSSARIO.filter(item => item.cat === filtro);
+
+        itens.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card-tag';
+            card.innerHTML = `
+                <div class="card-tag-header">
+                    <span class="tag-nome">${escaparTexto(item.tag)}</span>
+                    <span class="tag-categoria">${item.cat}</span>
+                </div>
+                <p class="tag-desc">${item.desc}</p>
+                <div class="exemplo-box">
+                    <button class="btn-copiar-exemplo" onclick="copiarExemplo('${escaparTexto(item.ex).replace(/'/g, "\\'")}', this)">📋 Copiar</button>
+                    <code class="exemplo-codigo">${escaparTexto(item.ex)}</code>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function filtrarGlossario(categoria, btn) {
+        document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderizarGlossario(categoria);
+    }
+
+    function copiarExemplo(texto, btn) {
+        navigator.clipboard.writeText(texto).then(() => {
+            mostrarToast("📋 Exemplo copiado para a área de transferência!");
+            const orig = btn.innerText;
+            btn.innerText = "✓";
+            setTimeout(() => btn.innerText = orig, 1500);
+        });
+    }
+
+    function mostrarToast(msg) {
+        const t = document.getElementById('toastMsg');
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    /* INICIALIZAÇÃO */
+    window.addEventListener('DOMContentLoaded', () => {
+        carregarDesafio(1);
+        renderizarGlossario();
+    });
+</script>
+
+</body>
+</html>
